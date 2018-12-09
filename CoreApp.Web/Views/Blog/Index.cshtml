@@ -1,0 +1,72 @@
+﻿@model PagedResult<BlogViewModel>
+@{
+    ViewData["Title"] = Model.CurrentPage == 1 ? "Bài viết" : $"Bài viết - Trang {Model.CurrentPage}";
+}
+
+@section Styles {
+    <style type="text/css">
+        .entry-excerpt {
+            font-size: 16px;
+        }
+    </style>
+}
+
+<section class="blog_post">
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- Center colunm-->
+            <div class="center_column col-xs-12 col-sm-12" id="center_column">
+                <div class="page-title">
+                    <span style="font-size:18px; font-weight: 600;">Bài viết</span>
+                    &nbsp;(@Model.RowCount kết quả)
+                </div>
+                <ul class="blog-posts">
+                    @foreach (var item in Model.Results)
+                    {
+                        var url = $"{item.SeoAlias}-b.{item.Id}.html";
+                        var urlImage = $"/uploaded/images/blogs/{item.Image}?w=360&h=212";
+
+                        <li class="post-item wow fadeInUp">
+                            <article class="entry">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <div class="entry-thumb image-hover2">
+                                            <a href="@url">
+                                                <figure><img src="@urlImage" alt="@item.Name"></figure>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <h3>
+                                            <a href="blog_single_post.html">@item.Name</a>
+                                        </h3>
+                                        <div class="entry-meta-data">
+                                            <span class="comment-count"> <i class="pe-7s-comment"></i>&nbsp; 3 </span>
+                                            <span class="date"><i class="pe-7s-date"></i>&nbsp; @item.DateCreated.Value.ToString("d")</span>
+                                        </div>
+                                        <div class="rating">
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star"></i>
+                                            <i class="fa fa-star-o"></i>
+                                            <i class="fa fa-star-o"></i>&nbsp; <span>(5 votes)</span>
+                                        </div>
+                                        <div class="entry-excerpt">@item.Description</div>
+                                    </div>
+                                </div>
+                            </article>
+                        </li>
+                    }
+                </ul>
+                <div class="sortPagiBar">
+                    @await Component.InvokeAsync("Pager", Model)
+                </div>
+            </div>
+            <!-- ./ Center colunm -->
+        </div>
+        <!-- ./row-->
+    </div>
+</section>
+<!-- Main Container End -->
+<partial name="~/Views/Shared/_ServicePartial.cshtml" />

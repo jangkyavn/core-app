@@ -1,0 +1,160 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@section Styles {
+    <link href="~/admin-side/css/plugins/forms/switch.min.css" rel="stylesheet" />
+    <style type="text/css">
+        #txtKeyword {
+            width: 75%;
+        }
+    </style>
+}
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-md-6 col-12 mb-2">
+                <h3 class="content-header-title">Phản hồi</h3>
+            </div>
+            <div class="content-header-right col-md-6 col-12">
+                @if ((await AuthorizationService.AuthorizeAsync(User, "FEEDBACK", Operations.Delete)).Succeeded)
+                {
+                    <button type="button" class="btn btn-danger float-md-right ml-1" id="btnDeleteMultiple" data-toggle="tooltip" data-placement="top" title="Xóa nhiều" disabled>
+                        <i class="fa fa-trash"></i>
+                    </button>
+                }
+                @if ((await AuthorizationService.AuthorizeAsync(User, "FEEDBACK", Operations.Create)).Succeeded)
+                {
+                    <button type="button" class="btn btn-success float-md-right" id="btnAddNew">
+                        <i class="fa fa-plus"></i> Thêm mới
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Responsive tables start -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row d-flex justify-content-between mx-1">
+                                <input type="text" class="form-control" id="txtKeyword" placeholder="Nhập từ khóa cần tìm" />
+                                <button class="btn btn-primary" id="btnSearch">
+                                    <i class="fa fa-search"></i> Tìm kiếm
+                                </button>
+                                <button class="btn btn-default" id="btnRefresh">
+                                    <i class="fa fa-refresh"></i> Làm mới
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="table-responsive">
+                                <table class="table table-hover table-responsive-md">
+                                    <caption>
+                                        <div class="row mx-1">
+                                            <div class="col-sm-3">
+                                                <div class="d-flex flex-row justify-content-around align-items-center">
+                                                    <span>
+                                                        Hiển thị
+                                                    </span>
+                                                    <select class="form-control" id="ddlShowPage" style="width: 90px;">
+                                                        <option value="10" selected="selected">10</option>
+                                                        <option value="20">20</option>
+                                                        <option value="50">50</option>
+                                                        <option value="100">100</option>
+                                                        <option value="-1">Tất cả</option>
+                                                    </select>
+                                                    <span>
+                                                        mục
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-9">
+                                                <ul id="paginationUL" class="justify-content-end mr-1"></ul>
+                                            </div>
+                                        </div>
+                                    </caption>
+                                    <thead>
+                                        <tr>
+                                            <th style="width:3%;">#</th>
+                                            <th style="width:2%;">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="chkAll">
+                                                    <label class="custom-control-label" for="chkAll"></label>
+                                                </div>
+                                            </th>
+                                            <th style="width: 15%;">Tên khách hàng</th>
+                                            <th style="width: 25%;">Email</th>
+                                            <th style="width: 10%;">Số điện thoại</th>
+                                            <th style="width: 30%;">Tin nhắc</th>
+                                            <th style="width: 10%;">Trạng thái</th>
+                                            <th width="5%"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyContent"></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="8">
+                                                Hiển thị <span id="lblFirstRow"></span> đến <span id="lblLastRow"></span> trong số <strong id="lblTotalRecords"></strong> mục
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Responsive tables end -->
+        </div>
+    </div>
+</div>
+
+<script id="tbodyTemplate" type="x-tmpl-mustache">
+    <tr>
+        <th>{{NumberOrder}}</th>
+        <td>
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input chk-item" data-id="{{Id}}" id="chkItem{{Id}}">
+                <label class="custom-control-label" for="chkItem{{Id}}"></label>
+            </div>
+        </td>
+        <td>{{Name}}</td>
+        <td>{{Email}}</td>
+        <td>{{PhoneNumber}}</td>
+        <td>{{Message}}</td>
+        <td>{{{Status}}}</td>
+        <td>
+            <button type="button" class="btn btn btn-info dropdown-toggle mr-1 mb-1" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                Thao tác
+            </button>
+            <div class="dropdown-menu">
+                @if ((await AuthorizationService.AuthorizeAsync(User, "FEEDBACK", Operations.Update)).Succeeded)
+                {
+                    <a class="dropdown-item btn-edit" href="#" data-id="{{Id}}">Sửa</a>
+                }
+                @if ((await AuthorizationService.AuthorizeAsync(User, "FEEDBACK", Operations.Delete)).Succeeded)
+                {
+                    <a class="dropdown-item btn-delete" href="#" data-id="{{Id}}">Xóa</a>
+                }
+            </div>
+        </td>
+    </tr>
+</script>
+
+<partial name="_AddEditModalPartial" />
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/lib/mustache/mustache.js"></script>
+    <script src="~/lib/twbs-pagination/jquery.twbsPagination.js"></script>
+    <script src="~/admin-side/vendors/js/forms/toggle/bootstrap-checkbox.min.js"></script>
+    <script src="~/admin-side/js/scripts/forms/switch.min.js"></script>
+    <script src="~/admin-side/app/controllers/feedback/index.js" asp-append-version="true"></script>
+    <script>
+        var feedback = new feedbackController();
+        feedback.initialize();
+    </script>
+}

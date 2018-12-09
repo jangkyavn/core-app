@@ -1,0 +1,252 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@model CheckoutViewModel
+@{
+    ViewData["Title"] = "Đặt hàng";
+}
+
+@section Styles {
+    <style type="text/css">
+        .text-danger {
+            color: red;
+        }
+    </style>
+}
+
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Trở về trang chủ" href="/trang-chu.html">Trang chủ</a><span>&raquo;</span></li>
+                    <li><strong>Đặt hàng</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<section class="main-container col2-right-layout">
+    <div class="main container">
+        <div class="row">
+            <div class="col-main col-sm-12 col-xs-12">
+                <div class="page-title">
+                    <h2>Đặt hàng</h2>
+                </div>
+                <div class="page-content checkout-page">
+                    @if (ViewData["Success"] != null)
+                    {
+                        if ((bool)ViewData["Success"] == true)
+                        {
+                            <div class="alert alert-success">
+                                Cảm ơn bạn đã đặt hàng của bạn. Chúng tôi sẽ sớm xác nhận đơn đặt hàng của bạn.<br />
+                                Nhấn vào <a href="/trang-chu.html"><strong>đây</strong></a> để tiếp tục mua hàng.
+                            </div>
+
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger">
+                                Có lỗi trong tiến trình đặt hàng. Vui lòng liên hệ với quản trị viên.
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <h4 class="checkout-sep">1. Thông tin vận chuyển</h4>
+                        <div class="box-border">
+                            <div class="row">
+                                <div class="col-md-8 col-sm-8">
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        var user = await UserManager.GetUserAsync(User);
+                                        var firstName = user.FullName.Substring(user.FullName.IndexOf(' ') + 1, (user.FullName.Length - 1) - user.FullName.IndexOf(' '));
+
+                                        <input type="hidden" value="@user.Id" id="hidUserId" />
+
+                                        <div class="alert alert-success" id="baseInformationLayout">
+                                            <a href="#" class="close" style="font-size: 15px; color: blue" id="btnUpdateBaseInformation">Cập nhật</a>
+                                            <h5>Thông tin cơ bản</h5>
+                                            <p>Họ tên: <strong>@user.FullName</strong></p>
+                                            <p>Email: <strong>@user.Email</strong></p>
+                                            <p>Số điện thoại: <strong id="lblPhoneNumber">@(user.PhoneNumber == null ? "???" : user.PhoneNumber)</strong>&nbsp;&nbsp;<label class="text-danger" id="lblPhoneNumberError" style="display: none;">Bạn cần phải nhập số điện thoại.</label></p>
+                                        </div>
+                                        <div class="panel panel-success" id="baseInformationFormLayout" style="display: none;">
+                                            <div class="panel-heading">Thông tin cơ bản</div>
+                                            <div class="panel-body">
+                                                <form id="baseInformationForm">
+                                                    <div class="form-group col-sm-12">
+                                                        <label for="txtEmail" class="required">Email:</label>
+                                                        <input type="text" class="input form-control" name="email" id="txtEmail" value="@user.Email" readonly>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="txtLastName" class="required">Họ:</label>
+                                                        <input type="text" class="input form-control" name="lastName" id="txtLastName" value="@user.FullName.Split(' ')[0]">
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="txtFirstName" class="required">Tên</label>
+                                                        <input type="text" name="firstName" class="input form-control" id="txtFirstName" value="@firstName">
+                                                    </div>
+                                                    <div class="form-group col-sm-12">
+                                                        <label for="txtPhoneNumber" class="required">Số điện thoại:</label>
+                                                        <input type="text" class="input form-control" name="phoneNumber" id="txtPhoneNumber" value="@(user.PhoneNumber == null ? "" : user.PhoneNumber)">
+                                                    </div>
+                                                    <div class="form-group col-sm-2">
+                                                        <button type="button" class="btn btn-success" id="btnSaveBaseInformation">
+                                                            <i class="fa fa-save"></i>&nbsp;Lưu
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                        <div class="alert alert-success" id="deliveryAddressLayout">
+                                            <a href="#" class="close" style="font-size: 15px; color: blue" id="btnUpdateDeliveryAddress">Cập nhật</a>
+                                            <h5>Địa chỉ giao hàng</h5>
+                                            <p>Địa chỉ: <strong id="lblAddress">@(user.Address == null ? "???" : user.Address)</strong>&nbsp;&nbsp;<label class="text-danger" id="lblAddressError" style="display: none;">Bạn cần phải nhập địa chỉ.</label></p>
+                                        </div>
+                                        <div class="panel panel-success" id="deliveryAddressFormLayout" style="display: none;">
+                                            <div class="panel-heading">Địa chỉ giao hàng</div>
+                                            <div class="panel-body">
+                                                <form id="deliveryAddressForm">
+                                                    <div class="form-group col-sm-12">
+                                                        <label for="txtAddress" class="required">Địa chỉ:</label>
+                                                        <textarea class="input form-control" name="address" id="txtAddress">@(user.Address == null ? "" : user.Address)</textarea>
+                                                    </div>
+                                                    <div class="form-group col-sm-4">
+                                                        <label for="txtLastName" class="required">Tỉnh/Thành phố:</label>
+                                                        <select class="form-control" id="ddlCity" name="city"></select>
+                                                    </div>
+                                                    <div class="form-group col-sm-4">
+                                                        <label for="txtFirstName" class="required">Quận/Huyện</label>
+                                                        <select class="form-control" id="ddlDistrict" name="district" disabled></select>
+                                                    </div>
+                                                    <div class="form-group col-sm-4">
+                                                        <label for="txtPhoneNumber" class="required">Phường/Xã:</label>
+                                                        <select class="form-control" id="ddlWard" name="ward" disabled></select>
+                                                    </div>
+                                                    <div class="form-group col-sm-12">
+                                                        <button type="button" class="btn btn-success" id="btnSaveDeliveryAddress">
+                                                            <i class="fa fa-save"></i>&nbsp;Lưu
+                                                        </button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <button class="button"><i class="icon-login"></i>&nbsp; <span>Login</span></button>
+                                    }
+
+                                    <button type="button" class="button" onclick="window.location.href='/gio-hang.html'"><i class="fa fa-angle-double-left"></i>&nbsp;<span>Quay về giỏ hàng</span></button>
+                                    <button type="button" class="button btn-continue" data-step="1" id="btnStepOne">
+                                        <i class="fa fa-angle-double-right"></i>&nbsp; <span>Tiếp tục</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="checkout-sep">2. Phương thức thanh toán</h4>
+                        <div class="box-border">
+                            <ul>
+                                @for (int i = 0; i < Model.PaymentMethods.Count; i++)
+                                {
+                                    <li>
+                                        <label for="@Model.PaymentMethods[i].Value">
+                                            <input type="radio" class="rdo-payment-method" name="paymentMethod" asp-for="PaymentMethod" value="@Model.PaymentMethods[i].Value" id="@Model.PaymentMethods[i].Value">
+                                            @Model.PaymentMethods[i].Name
+                                        </label>
+                                    </li>
+                                }
+                            </ul>
+                            <label class="text-danger" id="lblPaymentMethodError" style="display: none;">Vui lòng chọn phương thức thanh toán.</label>
+                            <br />
+
+                            <button type="button" class="button btn-back"><i class="fa fa-angle-double-left"></i>&nbsp; <span>Quay lại</span></button>
+                            <button type="button" class="button btn-continue" data-step="2" id="btnStepTwo">
+                                <i class="fa fa-angle-double-right"></i>&nbsp; <span>Tiếp tục</span>
+                            </button>
+                        </div>
+                        <h4 class="checkout-sep last">3. Xem xét đơn hàng</h4>
+                        <div class="box-border">
+                            <div class="table-responsive">
+                                <table class="table table-bordered cart_summary">
+                                    <thead>
+                                        <tr>
+                                            <th class="cart_product">Ảnh sản phẩm</th>
+                                            <th>Tên sản phẩn</th>
+                                            <th>Đơn giá</th>
+                                            <th>Số lượng</th>
+                                            <th>Thành tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Carts)
+                                        {
+                                            var url = $"/{item.Product.SeoAlias}-p.{item.Product.Id}.html";
+                                            var urlImage = $"/uploaded/images/products/{item.Product.Image}";
+                                            <tr>
+                                                <td class="cart_product">
+                                                    <a href="@url"><img src="@urlImage" alt="@item.Product.Name"></a>
+                                                </td>
+                                                <td class="cart_description">
+                                                    <h4><a href="@url">@item.Product.Name </a></h4>
+                                                    <small><a href="#">Color : @item.Color.Name</a></small><br>
+                                                    <small><a href="#">Size : @item.Size.Name</a></small>
+                                                </td>
+                                                <td class="price"><span>@item.Price.ToString("N0") </span></td>
+                                                <td class="qty">@item.Quantity</td>
+                                                <td class="price"><span>@((item.Price * item.Quantity).ToString("N0")) </span></td>
+                                            </tr>
+
+                                        }
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3"><strong>Tổng tiền</strong></td>
+                                            <td colspan="2"><strong>@Model.Carts.Sum(x => x.Quantity * x.Price).ToString("N0") </strong></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <form asp-controller="Cart" asp-action="Checkout" method="post">
+                                <input type="hidden" asp-for="PaymentMethod" />
+
+                                <label asp-for="CustomerMessage" class="label-control"></label>
+                                <textarea type="hidden" asp-for="CustomerMessage" class="form-control"></textarea>
+                                <span asp-validation-for="CustomerMessage" class="text-danger"></span>
+                                <br />
+                                <div style="clear: both;"></div>
+                                <div class="pull-right">
+                                    <recaptcha />
+                                    <span class="text-danger" id="recaptchaErrorMessage"></span>
+                                </div>
+                                <div style="clear: both;"></div>
+                                <button type="button" class="button btn-back"><i class="fa fa-angle-double-left"></i>&nbsp; <span>Quay lại</span></button>
+
+                                <button type="submit" class="button pull-right"><i class="fa fa-check"></i>&nbsp;<span>Đặt hàng</span></button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Main Container End -->
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <recaptcha-script validation-message-element-id="recaptchaErrorMessage" />
+
+    <script src="~/client-side/app/controllers/cart/checkout.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        var checkout = new CheckoutProduct();
+        checkout.initialize();
+    </script>
+}

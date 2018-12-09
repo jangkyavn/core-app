@@ -1,0 +1,74 @@
+﻿@inject IViewLocalizer Localizer
+
+<header>
+    <div class="header-container">
+        <div class="header-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4 col-md-4 col-xs-12">
+                        <!-- Default Welcome Message -->
+                        <div class="welcome-msg hidden-xs hidden-sm">@Localizer["WELCOME"]! </div>
+                        <!-- Language &amp; Currency wrapper -->
+                        <div class="language-currency-wrapper">
+                            <div class="inner-cl">
+                                <div class="block block-language form-language">
+                                    @await Html.PartialAsync("_SelectLanguagePartial")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- top links -->
+                    <div class="headerlinkmenu col-md-8 col-sm-8 col-xs-12">
+                        <span class="phone hidden-xs hidden-sm">@Localizer["CALL_US"]: +123.456.789</span>
+                        <ul class="links">
+                            <li class="hidden-xs">
+                                <a title="@Localizer["POLICY"]" href="/chinh-sach.html">
+                                    <span>@Localizer["POLICY"]</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a title="@Localizer["HELP_CENTER"]" href="/tro-giup.html">
+                                    <span>@Localizer["HELP_CENTER"]</span>
+                                </a>
+                            </li>
+                            @await Html.PartialAsync("_LoginPartial")
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- header inner -->
+        <div class="header-inner">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3 col-xs-12 jtv-logo-block">
+                        <!-- Header Logo -->
+                        <div class="logo">
+                            <a title="Trang chủ" href="/trang-chu.html">
+                                <img alt="ShopMart" title="ShopMart" src="~/client-side/images/logo.png">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-6 jtv-top-search">
+                        <!-- Search -->
+                        <div class="top-search">
+                            <div id="search">
+                                <form action="/tim-kiem.html" method="get">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="@Localizer["INPUT_PRODUCT_NAME"]..." name="keyword" id="txtKeywordSearch">
+                                        <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- End Search -->
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-3 top-cart">
+                        <!-- top cart -->
+                        <partial name="_HeaderCartPartial" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

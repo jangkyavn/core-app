@@ -1,0 +1,89 @@
+﻿@model List<ProductCategoryViewModel>
+
+@inject IViewLocalizer Localizer
+
+@section Styles {
+    <style>
+        .bold-text {
+            font-weight: bold;
+        }
+    </style>
+}
+
+<div class="navleft-container">
+    <div class="mega-menu-title">
+        <h3><span>@Localizer["ALL_CATEGORIES"]</span></h3>
+    </div>
+
+    <!-- Shop by category -->
+    <div class="mega-menu-category">
+        <ul class="nav">
+            @foreach (var item in Model.Where(x => x.ParentId == null))
+            {
+                if (Model.Any(x => x.ParentId == item.Id))
+                {
+                    var listSubItem = Model.Where(x => x.ParentId == item.Id).Select(x => x.Id);
+
+                    if (Model.Where(x => x.ParentId != null).Any(x => listSubItem.Any(y => y == x.ParentId)))
+                    {
+                        var idx = 1;
+                        <li>
+                            <a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name </a>
+                            <div class="wrap-popup">
+                                <div class="popup">
+                                    <div class="row">
+                                        @foreach (var subItem in Model.Where(x => x.ParentId == item.Id))
+                                        {
+                                            idx++;
+                                            <div class="col-md-4 col-sm-6 @((idx % 2 == 0) ? "" : "has-sep") ">
+                                                <h3>
+                                                    <a href="/@subItem.SeoAlias-c.@(subItem.Id).html">@subItem.Name</a>
+                                                </h3>
+                                                <ul class="nav">
+                                                    @foreach (var childItem in Model.Where(x => x.ParentId == subItem.Id))
+                                                    {
+                                                        <li><a href="/@childItem.SeoAlias-c.@(childItem.Id).html">@childItem.Name</a></li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        }
+                                        <div class="col-md-4 has-sep hidden-sm">
+                                            <div class="custom-menu-right">
+                                                <div class="box-banner menu-banner">
+                                                    <div class="add-right"><a href="#"><img src="images/menu-banner-img4.jpg" alt="responsive"></a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name </a>
+                            <div class="wrap-popup column1">
+                                <div class="popup">
+                                    <ul class="nav">
+                                        @foreach (var subItem in Model.Where(x => x.ParentId == item.Id))
+                                        {
+                                            <li>
+                                                <a href="/@subItem.SeoAlias-c.@(subItem.Id).html"><span>@subItem.Name</span></a>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    }
+
+                }
+                else
+                {
+                    <li class="nosub"><a href="/@item.SeoAlias-c.@(item.Id).html">@item.Name</a></li>
+                }
+            }
+        </ul>
+    </div>
+</div>

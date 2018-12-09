@@ -1,0 +1,60 @@
+﻿<div class="modal fade text-left" id="manageWholePriceModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white">
+                <h4 class="modal-title">Quản lý giá bán sỉ sản phẩm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form row" id="wholePriceForm">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="hidId" value="0" />
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Thông tin giá bán sỉ sản phẩm</h4>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <td>Từ</td>
+                                            <td>Đến</td>
+                                            <td>Giá</td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="wholePriceContent"></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="4">
+                                                <button class="btn btn-sm btn-success" type="button" id="btn-add-whole-price">Thêm</button>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-light" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSaveWholePrice">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="x-tmpl-mustache" id="wholePriceTemplate">
+    <tr data-id="{{Id}}">
+        <td><input type="number" class="form-control txtQuantityFrom" value="{{FromQuantity}}" /></td>
+        <td><input type="number" class="form-control txtQuantityTo" value="{{ToQuantity}}" /></td>
+        <td><input type="number" class="txtWholePrice form-control" value="{{Price}}" /></td>
+        <td><button class="btn btn-xs btn-danger btn-delete-whole-price" data-id="{{Id}}" type="button"><i class="fa fa-trash"></i></button></td>
+    </tr>
+</script>

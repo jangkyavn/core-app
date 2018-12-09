@@ -1,0 +1,93 @@
+﻿<div class="modal fade text-left" id="detailModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form row" id="billForm">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="hidId" value="0" />
+                    <input type="hidden" id="hidDateCreated" value="" />
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Thông tin hóa đơn</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label for="txtCustomerName">Tên khách hàng *</label>
+                                        <input type="text" id="txtCustomerName" class="form-control" placeholder="Nhập tên khách hàng" name="customerName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtCustomerMobile">Số điện thoại *</label>
+                                        <input type="text" id="txtCustomerMobile" class="form-control" placeholder="Nhập số điện thoại" name="customerMobile" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtCustomerAddress">Địa chỉ *</label>
+                                        <textarea id="txtCustomerAddress" class="form-control" placeholder="Nhập địa chỉ" name="customerAddress"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtCustomerMessage">Tin nhắn</label>
+                                        <textarea id="txtCustomerMessage" class="form-control" placeholder="Nhập tin nhắn" name="customerMessage"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ddlPaymentMethod">Phương thức thanh toán *</label>
+                                        <select id="ddlPaymentMethod" class="form-control" name="paymentMethod"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ddlBillStatus">Trạng thái đơn hàng *</label>
+                                        <select id="ddlBillStatus" class="form-control" name="billStatus"></select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="ddlBillStatus">Chi tiết hóa đơn *</label>
+                                        <table class="table table-bordered table-responsive-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th width="30%">Tên sản phẩm</th>
+                                                    <th width="20%">Màu sắc</th>
+                                                    <th width="20%">Kích cỡ</th>
+                                                    <th width="20%">Số lượng</th>
+                                                    <td width="10%"></td>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="billDetailsContent"></tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="5">
+                                                        <button class="btn btn-sm btn-success" id="btnAddDetail" type="button">Thêm</button>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-light" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-default" id="btnExport" >Xuất excel</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="x-tmpl-mustache" id="billDetailsTemplate">
+    <tr data-id="{{Id}}">
+        <td>{{{Products}}}</td>
+        <td>{{{Colors}}}</td>
+        <td>{{{Sizes}}}</td>
+        <td><input type="number" class="txtQuantity form-control" value="{{Quantity}}" /></td>
+        <td><button class="btn btn-sm btn-danger btn-delete-detail" type="button"><i class="fa fa-trash"></i></button></td>
+    </tr>
+</script>

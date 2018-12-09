@@ -1,0 +1,27 @@
+[
+  {
+    "outputFileName": "wwwroot/admin-side/vendors/css/extensions/toastr.min.css",
+    "inputFiles": [
+      "wwwroot/admin-side/vendors/css/extensions/toastr.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/admin-side/vendors/css/extensions/sweetalert.min.css",
+    "inputFiles": [
+      "wwwroot/admin-side/vendors/css/extensions/sweetalert.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/admin-side/app/shared/shared.js",
+    "inputFiles": [
+      "wwwroot/admin-side/app/shared/core.js",
+      "wwwroot/admin-side/app/shared/message.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/admin-side/app/controllers/base/index.min.js",
+    "inputFiles": [
+      "wwwroot/admin-side/app/controllers/base/index.js"
+    ]
+  }
+]

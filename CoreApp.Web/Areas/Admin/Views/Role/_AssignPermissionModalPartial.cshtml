@@ -1,0 +1,85 @@
+﻿<div class="modal fade text-left" id="grantPermissionModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white">
+                <h4 class="modal-title">Cấp quyền</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-xs-12 col-md-12">
+                        <input type="hidden" id="hidRoleId" />
+
+                        <table class="table table-hover tree" id="tblFunction">
+                            <thead class="bordered-darkorange">
+                                <tr>
+                                    <th>Tên chức năng</th>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="chkAllRead" value="{{Id}}">
+                                            <label class="custom-control-label" for="chkAllRead">Xem</label>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="chkAllCreate" value="{{Id}}">
+                                            <label class="custom-control-label" for="chkAllCreate">Thêm</label>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="chkAllEdit" value="{{Id}}">
+                                            <label class="custom-control-label" for="chkAllEdit">Sửa</label>
+                                        </div>
+                                    </th>
+                                    <th>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="chkAllDelete" value="{{Id}}">
+                                            <label class="custom-control-label" for="chkAllDelete">Xóa</label>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody id="permissionDataContent"></tbody>
+                        </table>
+                        <script id="permissionDataTemplate" type="x-tmpl-mustache">
+                            <tr class="treegrid-{{Id}} {{treegridparent}}" data-id="{{Id}}">
+                                <td>{{Name}}</td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input chk-read {{isCheckReadAllParent}}" id="chkItemRead{{Id}}" value="{{Id}}">
+                                        <label class="custom-control-label" for="chkItemRead{{Id}}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input chk-create {{isCheckCreateAllParent}}" id="chkItemCreate{{Id}}" value="{{Id}}">
+                                        <label class="custom-control-label" for="chkItemCreate{{Id}}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input chk-edit {{isCheckEditAllParent}}" id="chkItemEdit{{Id}}" value="{{Id}}">
+                                        <label class="custom-control-label" for="chkItemEdit{{Id}}"></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input chk-delete {{isCheckDeleteAllParent}}" id="chkItemDelete{{Id}}" value="{{Id}}">
+                                        <label class="custom-control-label" for="chkItemDelete{{Id}}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                        </script>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-light" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSavePermission">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

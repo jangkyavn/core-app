@@ -1,0 +1,47 @@
+﻿<div class="modal fade text-left" id="manageImageModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white">
+                <h4 class="modal-title">Quản lý hình ảnh sản phẩm</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form row" id="productImageForm">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="hidId" value="0" />
+
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Thông tin hình ảnh sản phẩm</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label>Ảnh đã chọn</label>
+                                        <div id="productImageContent">
+
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtDescription">Chọn ảnh</label>
+                                        <div class="input-group">
+                                            <input type="file" id="fileImage" />
+                                        </div><!-- /input-group -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-light" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSaveImages">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

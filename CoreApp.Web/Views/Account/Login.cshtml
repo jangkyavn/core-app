@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<AppUser> SignInManager
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+@section Styles {
+    <link href="~/lib/bootstrap-social/bootstrap-social.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .btn-social {
+            width: 170px;
+            margin: 0 1rem 0 1rem;
+        }
+    </style>
+}
+
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Trở về trang chủ" href="/trang-chu.html">Trang chủ</a><span>&raquo;</span></li>
+                    <li><strong>Đăng nhập</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="page-content">
+            <div class="account-login" style="text-align: center;">
+                @{
+                    var loginProviders = (await SignInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                    if (loginProviders.Count != 0)
+                    {
+                        <form asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+                            <h4>Đăng nhập bằng mạng xã hội</h4>
+                            <div>
+                                <p>
+                                    @foreach (var provider in loginProviders)
+                                    {
+                                        switch (provider.Name)
+                                        {
+                                            case "Facebook":
+                                                <button type="submit" class="btn btn-lg btn-social btn-facebook"
+                                                        name="provider"
+                                                        value="@provider.Name"
+                                                        title="Đăng nhập bằng tài khoản @provider.DisplayName của bạn">
+                                                    <span class="fa fa-facebook"></span> @provider.Name
+                                                </button>
+                                                break;
+                                            case "Google":
+                                                <button type="submit" class="btn btn-lg btn-social btn-google"
+                                                        name="provider"
+                                                        value="@provider.Name"
+                                                        title="Đăng nhập bằng tài khoản @provider.DisplayName của bạn">
+                                                    <span class="fa fa-google"></span> @provider.Name
+                                                </button>
+                                                break;
+                                        }
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Main Container End -->
+<partial name="_ServicePartial" />
+
+@section Scripts {
+
+}

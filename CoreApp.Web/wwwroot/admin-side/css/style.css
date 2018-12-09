@@ -1,0 +1,9 @@
+.custom-control-label::before,
+.custom-control-label::after {
+    width: 1.25rem !important;
+    height: 1.25rem !important;
+}
+
+.content-header-left > h3 {
+    margin-top: 0.5rem;
+}

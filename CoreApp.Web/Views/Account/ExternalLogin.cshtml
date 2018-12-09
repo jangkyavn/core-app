@@ -1,0 +1,62 @@
+﻿@model ExternalLoginViewModel
+@{
+    ViewData["Title"] = "Đăng nhập bên ngoài";
+}
+
+<form asp-action="ExternalLoginConfirmation" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" id="loginForm">
+    <input type="hidden" asp-for="Email" class="form-control">
+    <input type="hidden" asp-for="FirstName" class="form-control">
+    <input type="hidden" asp-for="LastName" class="form-control">
+    <input type="hidden" asp-for="Avatar" class="form-control">
+</form>
+
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home">
+                        <a title="Trở về trang chủ" href="/trang-chu.html">Trang chủ</a><span>&raquo;</span>
+                    </li>
+                    <li><strong>Liên kết với tài khoản @ViewData["LoginProvider"].</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="page-content">
+            <div class="account-login">
+                <div class="col-md-3 col-sm-2"></div>
+                <div class="col-md-6 col-sm-8">
+                    <div class="alert alert-success" style="font-size: 14px; text-align: center;">
+                        Bạn đã đăng nhập thành công bằng tài khoản <strong>@ViewData["LoginProvider"]</strong>. <br />
+                        Bạn sẽ được chuyển hướng đến trang chủ trong vòng <strong id="lblSecond">3</strong>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Main Container End -->
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script type="text/javascript">
+        function submitForm() {
+            document.getElementById('loginForm').submit();
+        }
+
+        var idx = 3;
+        setInterval(function () {
+            $('#lblSecond').text(idx--);
+
+            if (idx === 0) {
+                submitForm();
+            }
+        }, 1000);
+    </script>
+}

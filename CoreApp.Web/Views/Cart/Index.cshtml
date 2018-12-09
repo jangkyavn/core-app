@@ -1,0 +1,87 @@
+﻿
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+@section Styles {
+    <style>
+        #ddlSizeId, #ddlColorId {
+            width: 150px;
+        }
+    </style>
+}
+
+<!-- Main Container -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="col-main">
+            <div class="cart">
+
+                <div class="page-content page-order">
+                    <div class="page-title">
+                        <h2>Giỏ hàng</h2>
+                    </div>
+
+                    <div class="order-detail-content">
+                        <div class="table-responsive">
+                            <table class="table table-bordered cart_summary">
+                                <thead>
+                                    <tr>
+                                        <th class="cart_product">Ảnh sản phẩm</th>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Giá</th>
+                                        <th>Số lượng</th>
+                                        <th>Thành tiền</th>
+                                        <th class="action"><i class="fa fa-trash-o"></i></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="cartsContent"></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="3"><strong>Tổng tiền</strong></td>
+                                        <td colspan="3"><strong><span id="lblTotalAmount"></span> </strong></td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <div class="alert alert-danger" style="text-align: center; display: none;" id="lblEmptyCart">
+                            Không có sản phẩm nào trong giỏ hàng
+                        </div>
+                        <div class="cart_navigation">
+                            <a class="continue-btn" href="/trang-chu.html"><i class="fa fa-arrow-left"> </i>&nbsp; Tiếp tục mua hàng</a>
+                            <a id="btnClearAll" href="#"><i class="fa fa-remove"> </i>&nbsp; Xóa giỏ hàng</a>
+                            <a class="checkout-btn" href="/dat-hang.html"><i class="fa fa-check"></i> Tiến hành đặt hàng</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script id="cartItemTemplate" type="x-tmpl-mustache">
+    <tr data-id="{{ProductId}}">
+        <td class="cart_product">
+            <a href="{{Url}}">
+                <img src="{{UrlImage}}" alt="{{ProductName}}">
+            </a>
+        </td>
+        <td class="cart_description">
+            <p class="product-name"><a href="{{Url}}">{{ProductName}}</a></p>
+            <small><a href="#">Màu sắc : {{{Colors}}}</a></small>
+            <small><a href="#">Kích cỡ : {{{Sizes}}}</a></small>
+        </td>
+        <td class="price"><span>{{Price}}</span></td>
+        <td class="qty"><input class="form-control input-sm txtQuantity" data-id="{{ProductId}}" type="text" value="{{Quantity}}"></td>
+        <td class="price"><span>{{Amount}}</span></td>
+        <td class="action"><a href="#" data-id="{{ProductId}}" class="btn-delete"><i class="icon-close"></i></a></td>
+    </tr>
+</script>
+
+@section Scripts {
+    <script src="~/client-side/app/controllers/cart/index.js" asp-append-version="true"></script>
+    <script>
+        var cart = new CartController();
+        cart.initialize();
+    </script>
+}

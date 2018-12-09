@@ -1,0 +1,59 @@
+﻿@using Microsoft.Extensions.Configuration;
+@inject IConfiguration Configuration
+
+@model BillViewModel
+
+<h1>ShopMartCore new bill</h1>
+<table>
+    <tr>
+        <td>Họ tên khách hàng:</td>
+        <td>@Model.CustomerName</td>
+    </tr>
+    <tr>
+        <td>Số điện thoại:</td>
+        <td>@Model.CustomerMobile</td>
+    </tr>
+    <tr>
+        <td>Địa chỉ:</td>
+        <td>@Model.CustomerAddress</td>
+    </tr>
+    <tr>
+        <td>Ngày đặt hàng:</td>
+        <td>@Model.DateCreated.Value.ToString("dd/MM/yyyy hh:mm")</td>
+    </tr>
+</table>
+
+<table class="table-bordered">
+    <thead>
+        <tr style="background-color: #E83F33; color: white;">
+            <th>Ảnh sản phẩm</th>
+            <th>Tên sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.BillDetails)
+        {
+            var urlImage = $"{Configuration["Configs:Domain"]}/uploaded/images/products/{item.Product.Image}";
+
+            <tr>
+                <td>
+                    <img src="@urlImage" width="100" />
+                </td>
+                <td>@item.Product.Name</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+                <td>@((item.Quantity * item.Price).ToString("N0"))</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="5" style="color: red; font-weight: bold;">
+                Tổng tiền: @Model.BillDetails.Sum(x => x.Quantity * x.Price).ToString("N0") VNĐ
+            </td>
+        </tr>
+    </tfoot>
+</table>

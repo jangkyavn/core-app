@@ -1,0 +1,73 @@
+﻿@model ContactDetailViewModel
+
+@{
+    ViewData["Title"] = "Giới thiệu";
+}
+
+<input type="hidden" id="hidLng" value="@Model.Lng" />
+<input type="hidden" id="hidLat" value="@Model.Lat" />
+<input type="hidden" id="hidAddress" value="@Model.Address" />
+<input type="hidden" id="hidName" value="@Model.Name" />
+
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Quay về trang chủ" href="/trang-chu.html">Trang chủ</a><span>&raquo;</span></li>
+                    <li><strong>Giới thiệu</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="row">
+            <section class="col-main col-sm-12">
+                <div id="contact" class="page-content page-contact">
+                    <div class="page-title">
+                        <h2>Giới thiệu</h2>
+                    </div>
+                    <div id="message-box-conact">Chào mừng đến với <strong>ShopMart</strong></div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-6" id="contact_form_map">
+                            <h3 class="page-subheading">Let's get in touch</h3>
+                            <p>Lorem ipsum dolor sit amet onsectetuer adipiscing elit. Mauris fermentum dictum magna. Sed laoreet aliquam leo. Ut tellus dolor dapibus eget. Mauris tincidunt aliquam lectus sed vestibulum. Vestibulum bibendum suscipit mattis.</p>
+                            <br />
+                            <ul>
+                                <li><i class="fa fa-circle"></i> Praesent nec tincidunt turpis.</li>
+                                <li><i class="fa fa-circle"></i> Aliquam et nisi risus.&nbsp;Cras ut varius ante.</li>
+                                <li><i class="fa fa-circle"></i> Ut congue gravida dolor, vitae viverra dolor.</li>
+                            </ul>
+                            <br />
+                            <ul class="store_info">
+                                <li><i class="fa fa-home"></i>@Model.Address</li>
+                                <li><i class="fa fa-phone"></i><span>@Model.Phone</span></li>
+                                <li><i class="fa fa-envelope"></i>Email: <span><a href="mailto:@Model.Email">@Model.Email</a></span></li>
+                            </ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <div id="map" style="width:100%;height:500px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</section>
+<!-- Main Container End -->
+<partial name="_ServicePartial" />
+
+@section Scripts {
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDzRpFGePzmu5Eo1br7VduC_lsG50z09yQ">
+    </script>
+    <script src="~/client-side/app/controllers/about/index.js"></script>
+    <script type="text/javascript">
+        var about = new AboutController();
+        about.initialize();
+    </script>
+}

@@ -1,0 +1,30 @@
+﻿<div class="top-cart-contain" id="headerCart">
+    <div class="mini-cart">
+        <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
+            <a href="#">
+                <div class="cart-icon"><i class="icon-basket-loaded icons"></i><span class="cart-total" id="cartTotal">0</span></div>
+                <div class="shoppingcart-inner hidden-xs"><span class="cart-title">Giỏ hàng</span> </div>
+            </a>
+        </div>
+        <div>
+            <div class="top-cart-content" id="cartContent"></div>
+        </div>
+    </div>
+</div>
+
+<script id="templateHeaderCart" type="x-tmpl-mustache">
+    <li class="item {{IsLast}} {{EvenOdd}}">
+        <a href="{{Url}}" title="{{ProductName}}" class="product-image">
+            <img src="{{Image}}" alt="{{ProductName}}" width="65" />
+        </a>
+        <div class="product-details">
+            <a href="#" title="Xóa sản phẩm này" data-id="{{ProductId}}" class="remove-cart">
+                <i class="pe-7s-trash"></i>
+            </a>
+            <p class="product-name">
+                <a href="{{Url}}">{{ProductName}}</a>
+            </p>
+            <strong>{{Quantity}}</strong> x <span class="price">{{Price}}</span>
+        </div>
+    </li>
+</script>

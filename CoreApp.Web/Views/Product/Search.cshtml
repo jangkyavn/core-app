@@ -1,0 +1,190 @@
+﻿@model SearchResultViewModel
+@{
+    ViewData["Title"] = "Kết quả tìm kiếm của " + Model.Keyword;
+    ViewData["MetaKeyword"] = Model.Keyword;
+    ViewData["MetaDescription"] = Model.Keyword;
+}
+
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home"> <a title="Trở về trang chủ" href="/trang-chu.html">Trang chủ</a><span>&raquo;</span></li>
+                    <li><strong>Kết quả tìm kiếm: @Model.Keyword</strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<div class="main-container col2-left-layout">
+    <div class="container">
+        <div class="row">
+            <div class="col-main col-sm-9 col-xs-12 col-sm-push-3">
+                <div class="category-description std">
+                    <div class="slider-items-products">
+                        <div id="category-desc-slider" class="product-flexslider hidden-buttons">
+                            <div class="slider-items slider-width-col1 owl-carousel owl-theme">
+                                <!-- Item -->
+                                <div class="item">
+                                    <a href="#x"><img alt="HTML template" src="~/client-side/images/cat-slider-img1.jpg"></a>
+                                    <div class="inner-info">
+                                        <div class="cat-img-title">
+                                            <span>Best Product 2017</span>
+                                            <h2 class="cat-heading">Best Selling Brand</h2>
+                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+                                            <a class="info" href="#">Shop Now</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- End Item -->
+                                <!-- Item -->
+                                <div class="item"> <a href="#x"><img alt="HTML template" src="~/client-side/images/cat-slider-img2.jpg"></a> </div>
+                                <!-- End Item -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="shop-inner">
+                    <div class="page-title">
+                        <span style="font-size:20px; font-weight: 600;">Từ khóa: @Model.Keyword</span>
+                        &nbsp;(@Model.Data.RowCount sản phẩm)
+                    </div>
+                    <div class="toolbar">
+                        @if (Model.Data.RowCount != 0)
+                        {
+                            <div class="sorter">
+                                <form action="/tim-kiem.html" method="get">
+                                    <input type="hidden" name="keyword" value="@Model.Keyword" />
+                                    <div class="short-by">
+                                        <label>Sắp xếp:</label>
+                                        <select name="sortBy"
+                                                asp-for="SortType"
+                                                onchange="this.form.submit()"
+                                                asp-items="Model.SortTypes"></select>
+                                    </div>
+                                    <div class="short-by page">
+                                        <label>Show:</label>
+                                        <select name="pageSize"
+                                                asp-for="PageSize"
+                                                onchange="this.form.submit()"
+                                                asp-items="Model.PageSizes"></select>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                    <div class="product-grid-area">
+                        @if (Model.Data.RowCount != 0)
+                        {
+                            <ul class="products-grid">
+                                @foreach (var item in Model.Data.Results)
+                                {
+                                    var url = "/" + item.SeoAlias + "-p." + item.Id + ".html";
+                                    var urlImage = $"/uploaded/images/products/{item.Image}?w=265&h=309";
+
+                                    <li class="item col-lg-4 col-md-3 col-sm-2 col-xs-1">
+                                        <div class="product-item">
+                                            <div class="item-inner">
+                                                <div class="product-thumbnail">
+                                                    @if (item.HotFlag)
+                                                    {
+                                                        <div class="icon-sale-label sale-left">Hot</div>
+                                                    }
+                                                    @if ((DateTime.Now - item.DateCreated.Value).Days <= 7)
+                                                    {
+                                                        <div class="icon-new-label new-right">Mới</div>
+                                                    }
+                                                    <div class="pr-img-area">
+                                                        <a title="@item.Name" href="@url">
+                                                            <figure>
+                                                                <img class="first-img" src="@urlImage" alt="@item.Name">
+                                                                <img class="hover-img" src="@urlImage" alt="@item.Name">
+                                                            </figure>
+                                                        </a>
+                                                    </div>
+                                                    <div class="pr-info-area">
+                                                        <div class="pr-button">
+                                                            <div class="mt-button add_to_wishlist">
+                                                                <a href="wishlist.html">
+                                                                    <i class="fa fa-heart"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button add_to_compare">
+                                                                <a href="compare.html">
+                                                                    <i class="fa fa-signal"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button quick-view">
+                                                                <a href="quick_view.html">
+                                                                    <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-info">
+                                                    <div class="info-inner">
+                                                        <div class="item-title">
+                                                            <a title="@item.Name" href="@url">@item.Name</a>
+                                                        </div>
+                                                        <div class="item-content">
+                                                            <div class="rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                            </div>
+                                                            <div class="item-price">
+                                                                <div class="price-box">
+                                                                    @if (item.PromotionPrice.HasValue)
+                                                                    {
+                                                                        <p class="special-price">
+                                                                            <span class="price"> @item.PromotionPrice.Value.ToString("N0") </span>
+                                                                        </p>
+                                                                        <p class="old-price">
+                                                                            <span class="price"> @item.Price.ToString("N0") </span>
+                                                                        </p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="regular-price">
+                                                                            <span class="price">@item.Price.ToString("N0")</span>
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div class="pro-action">
+                                                                <button type="button" class="add-to-cart" onclick="window.location.href='@url'"><span> Mua ngay</span> </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <div class="alert alert-danger" style="text-align: center; margin-top: 50px;">
+                                Không có sản phẩm nào.
+                            </div>
+                        }
+                    </div>
+                    @if (Model.Data.RowCount != 0)
+                    {
+                        @await Component.InvokeAsync("Pager", Model.Data)
+                    }
+                </div>
+            </div>
+            <partial name="~/Views/Shared/_SideBarPartial.cshtml" />
+        </div>
+    </div>
+</div>
+<!-- Main Container End -->

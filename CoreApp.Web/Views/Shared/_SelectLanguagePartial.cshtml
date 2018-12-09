@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
+@{
+    var culture = Context.Features.Get<IRequestCultureFeature>().RequestCulture.Culture;
+    var cultureItems = LocOptions.Value.SupportedUICultures
+        .Select(c => new SelectListItem { Value = c.Name, Text = c.NativeName.Substring(c.NativeName.IndexOf("(") + 1, c.NativeName.Length - c.NativeName.IndexOf("(") - 2) })
+        .ToList();
+}
+
+<form id="selectLanguage" asp-controller="Home"
+      asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path"
+      method="post" class="form-horizontal" role="form">
+    <input type="hidden" name="culture" id="hidCulture" />
+</form>
+
+<div class="lg-cur">
+    <span>
+        <img src="~/client-side/images/flag-@(culture.Name).jpg?w=18&h=14" alt=""><span>@culture.NativeName</span><i class="fa fa-angle-down"></i>
+    </span>
+</div>
+<ul>
+    @foreach (var item in cultureItems)
+    {
+        <li>
+            <a href="#" data-value="@item.Value" class="btn-country">
+                <img src="~/client-side/images/flag-@(item.Value).jpg?w=18&h=14" alt="@item.Text"><span>@item.Text</span>
+            </a>
+        </li>
+    }
+</ul>

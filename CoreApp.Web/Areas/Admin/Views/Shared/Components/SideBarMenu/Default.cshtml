@@ -1,0 +1,25 @@
+﻿@model List<FunctionViewModel>
+
+<div class="main-menu menu-fixed menu-dark menu-accordion menu-shadow" data-scroll-to-active="true">
+    <div class="main-menu-content">
+        <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
+            <li class="nav-item">
+                <a href="/admin/home/index"><i class="ft-home"></i><span class="menu-title" data-i18n="">Trang chủ</span></a>
+            </li>
+            @foreach (var parent in Model.Where(x => x.ParentId == null))
+            {
+                <li class="nav-item">
+                    <a href="#"><i class="ft-home"></i><span class="menu-title" data-i18n="">@parent.Name</span></a>
+                    <ul class="menu-content">
+                        @foreach (var child in Model.Where(x => x.ParentId == parent.Id))
+                        {
+                            <li>
+                                <a class="menu-item" href="@child.URL">@child.Name</a>
+                            </li>
+                        }
+                    </ul>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

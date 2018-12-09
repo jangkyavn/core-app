@@ -1,0 +1,731 @@
+﻿@model HomeViewModel
+@inject IProductService ProductService
+@{
+    ViewData["Title"] = Model.Title;
+    ViewData["MetaKeyword"] = Model.MetaKeyword;
+    ViewData["MetaDescription"] = Model.MetaDescription;
+}
+
+@section Styles {
+    <style type="text/css">
+        .blog_title {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .blog_description {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    </style>
+}
+
+<!-- Slideshow  -->
+<div class="main-slider" id="home">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3 col-sm-3 col-xs-12 banner-left hidden-xs">
+                <img src="~/client-side/images/banner-left.jpg" alt="banner">
+            </div>
+            <div class="col-sm-9 col-md-9 col-lg-9 col-xs-12 jtv-slideshow">
+                <div id="jtv-slideshow">
+                    <div id='rev_slider_4_wrapper' class='rev_slider_wrapper fullwidthbanner-container'>
+                        <div id='rev_slider_4' class='rev_slider fullwidthabanner'>
+                            <ul>
+                                @foreach (var slide in Model.HomeSlides)
+                                {
+                                    <li data-transition='fade' data-slotamount='7' data-masterspeed='1000' data-thumb=''>
+                                        <img src='@slide.Image' data-bgposition='left top' data-bgfit='cover' data-bgrepeat='no-repeat' alt="@slide.Name" />
+                                    </li>
+                                }
+                            </ul>
+                            <div class="tp-bannertimer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- service section -->
+<partial name="~/Views/Shared/_ServicePartial.cshtml" />
+
+<div class="inner-box">
+    <div class="container">
+        <div class="row">
+            <!-- Banner -->
+            <div class="col-md-3 top-banner hidden-sm">
+                <div class="jtv-banner3">
+                    <div class="jtv-banner3-inner">
+                        <a href="#"><img src="~/client-side/images/sub1.jpg" alt="HTML template"></a>
+                        <div class="hover_content">
+                            <div class="hover_data">
+                                <div class="title"> Big Sale 1</div>
+                                <div class="desc-text">Up to 55% off</div>
+                                <span>Camera, Laptop & Mobile</span>
+                                <p><a href="#" class="shop-now">Get it now!</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Best Sale -->
+            <div class="col-sm-12 col-md-9 jtv-best-sale special-pro">
+                <div class="jtv-best-sale-list">
+                    <div class="wpb_wrapper">
+                        <div class="best-title text-left">
+                            <h2>
+                                Ưu đãi đặc biệt
+                            </h2>
+                        </div>
+                    </div>
+                    <div class="slider-items-products">
+                        <div id="jtv-best-sale-slider" class="product-flexslider">
+                            <div class="slider-items">
+                                @foreach (var item in Model.PromotionProducts)
+                                {
+                                    var urlImage = $"/uploaded/images/products/{item.Image}";
+                                    var url = $"/{item.SeoAlias}-p.{item.Id}.html";
+
+                                    <div class="product-item">
+                                        <div class="item-inner">
+                                            <div class="product-thumbnail">
+                                                @if (item.HotFlag)
+                                                {
+                                                    <div class="icon-sale-label sale-left">Hot</div>
+                                                }
+                                                @if ((DateTime.Now - item.DateCreated.Value).Days <= 7)
+                                                {
+                                                    <div class="icon-new-label new-right">Mới</div>
+                                                }
+                                                <div class="pr-img-area">
+                                                    <a title="@item.Name" href="@url">
+                                                        <figure>
+                                                            <img class="first-img" src="@urlImage?w=190" alt="@item.Name">
+                                                            <img class="hover-img" src="@urlImage?w=190" alt="@item.Name">
+                                                        </figure>
+                                                    </a>
+                                                </div>
+                                                <div class="pr-info-area">
+                                                    <div class="pr-button">
+                                                        <div class="mt-button add_to_wishlist">
+                                                            <a href="wishlist.html">
+                                                                <i class="fa fa-heart-o"></i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="mt-button add_to_compare">
+                                                            <a href="compare.html">
+                                                                <i class="fa fa-link"></i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="mt-button quick-view">
+                                                            <a href="quick_view.html">
+                                                                <i class="fa fa-search"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item-info">
+                                                <div class="info-inner">
+                                                    <div class="item-title">
+                                                        <a title="@item.Name" href="@url">@item.Name </a>
+                                                    </div>
+                                                    <div class="item-content">
+                                                        <div class="rating">
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                            <i class="fa fa-star-o"></i>
+                                                        </div>
+                                                        <div class="item-price">
+                                                            @if (item.PromotionPrice.HasValue)
+                                                            {
+                                                                <p class="special-price">
+                                                                    <span class="price"> @item.PromotionPrice.Value.ToString("N0") </span>
+                                                                </p>
+                                                                <p class="old-price">
+                                                                    <span class="price"> @item.Price.ToString("N0") </span>
+                                                                </p>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="price-box">
+                                                                    <span class="regular-price">
+                                                                        <span class="price">@item.Price.ToString("N0")</span>
+                                                                    </span>
+                                                                </div>
+                                                            }
+                                                        </div>
+                                                        <div class="pro-action">
+                                                            <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
+                                                                <span> Mua ngay</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Latest -->
+<div class="container">
+    <div class="home-tab">
+        <div class="tab-title text-left">
+            <h2>Mới nhất</h2>
+            <ul class="nav home-nav-tabs home-product-tabs">
+                @for (var i = 0; i < Model.HomeCategories.Count; i++)
+                {
+                    var item = Model.HomeCategories[i];
+                    if (i == 0)
+                    {
+                        <li class="active">
+                            <a href="#@item.SeoAlias-latest" data-toggle="tab" aria-expanded="false">@item.Name</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="#@item.SeoAlias-latest" data-toggle="tab" aria-expanded="false">@item.Name</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div id="productLatestTabContent" class="tab-content">
+            @for (var i = 0; i < Model.HomeCategories.Count; i++)
+            {
+                var category = Model.HomeCategories[i];
+                string css = string.Empty;
+                if (i == 0)
+                {
+                    css = "tab-pane active in";
+                }
+                else
+                {
+                    css = "tab-pane wow fadeInLeft";
+                }
+                <div class="@css" id="@category.SeoAlias-latest">
+                    <div class="featured-pro">
+                        <div class="slider-items-products">
+                            <div id="computer-slider" class="product-flexslider hidden-buttons">
+                                <div class="slider-items slider-width-col4">
+                                    @foreach (var item in ProductService.GetLatestByCategoryId(category.Id, 5))
+                                    {
+                                        var urlImage = $"/uploaded/images/products/{item.Image}?w=265&h=309";
+                                        var url = $"/{item.SeoAlias}-p.{item.Id}.html";
+
+                                        <div class="product-item">
+                                            <div class="item-inner">
+                                                <div class="product-thumbnail">
+                                                    @if (item.HotFlag)
+                                                    {
+                                                        <div class="icon-sale-label sale-left">Hot</div>
+                                                    }
+                                                    @if ((DateTime.Now - item.DateCreated.Value).Days <= 7)
+                                                    {
+                                                        <div class="icon-new-label new-right">Mới</div>
+                                                    }
+                                                    <div class="pr-img-area">
+                                                        <a title="@item.Name" href="@url">
+                                                            <figure>
+                                                                <img class="first-img" src="@urlImage" alt="@item.Name">
+                                                                <img class="hover-img" src="@urlImage" alt="@item.Name">
+                                                            </figure>
+                                                        </a>
+                                                    </div>
+                                                    <div class="pr-info-area">
+                                                        <div class="pr-button">
+                                                            <div class="mt-button add_to_wishlist">
+                                                                <a href="wishlist.html">
+                                                                    <i class="fa fa-heart-o"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button add_to_compare">
+                                                                <a href="compare.html">
+                                                                    <i class="fa fa-link"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button quick-view">
+                                                                <a href="quick_view.html">
+                                                                    <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-info">
+                                                    <div class="info-inner">
+                                                        <div class="item-title">
+                                                            <a title="Product title here" href="@url">@item.Name </a>
+                                                        </div>
+                                                        <div class="item-content">
+                                                            <div class="rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                            </div>
+                                                            <div class="item-price">
+                                                                <div class="price-box">
+                                                                    @if (item.PromotionPrice.HasValue)
+                                                                    {
+                                                                        <p class="special-price">
+                                                                            <span class="price"> @item.PromotionPrice.Value.ToString("N0") </span>
+                                                                        </p>
+                                                                        <p class="old-price">
+                                                                            <span class="price"> @item.Price.ToString("N0") </span>
+                                                                        </p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="regular-price">
+                                                                            <span class="price">@item.Price.ToString("N0")</span>
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div class="pro-action">
+                                                                <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
+                                                                    <span> Mua ngay</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- BestSeller -->
+<div class="container">
+    <div class="home-tab">
+        <div class="tab-title text-left">
+            <h2>Bán chạy nhất</h2>
+            <ul class="nav home-nav-tabs home-product-tabs">
+                @for (var i = 0; i < Model.HomeCategories.Count; i++)
+                {
+                    var item = Model.HomeCategories[i];
+                    if (i == 0)
+                    {
+                        <li class="active">
+                            <a href="#@item.SeoAlias-bestselling" data-toggle="tab" aria-expanded="false">@item.Name</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="#@item.SeoAlias-bestselling" data-toggle="tab" aria-expanded="false">@item.Name</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div id="productBestSellingTabContent" class="tab-content">
+            @for (var i = 0; i < Model.HomeCategories.Count; i++)
+            {
+                var category = Model.HomeCategories[i];
+                string css = string.Empty;
+                if (i == 0)
+                {
+                    css = "tab-pane active in";
+                }
+                else
+                {
+                    css = "tab-pane wow fadeInLeft";
+                }
+                <div class="@css" id="@category.SeoAlias-bestselling">
+                    <div class="featured-pro">
+                        <div class="slider-items-products">
+                            <div id="computer-slider" class="product-flexslider hidden-buttons">
+                                <div class="slider-items slider-width-col4">
+                                    @foreach (var item in ProductService.GetBestSellingByCategoryId(category.Id, 5))
+                                    {
+                                        var urlImage = $"/uploaded/images/products/{item.Image}?w=265&h=309";
+                                        var url = $"/{item.SeoAlias}-p.{item.Id}.html";
+
+                                        <div class="product-item">
+                                            <div class="item-inner">
+                                                <div class="product-thumbnail">
+                                                    @if (item.HotFlag)
+                                                    {
+                                                        <div class="icon-sale-label sale-left">Hot</div>
+                                                    }
+                                                    @if ((DateTime.Now - item.DateCreated.Value).Days <= 7)
+                                                    {
+                                                        <div class="icon-new-label new-right">Mới</div>
+                                                    }
+                                                    <div class="pr-img-area">
+                                                        <a title="@item.Name" href="@url">
+                                                            <figure>
+                                                                <img class="first-img" src="@urlImage" alt="@item.Name">
+                                                                <img class="hover-img" src="@urlImage" alt="@item.Name">
+                                                            </figure>
+                                                        </a>
+                                                    </div>
+                                                    <div class="pr-info-area">
+                                                        <div class="pr-button">
+                                                            <div class="mt-button add_to_wishlist">
+                                                                <a href="wishlist.html">
+                                                                    <i class="fa fa-heart-o"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button add_to_compare">
+                                                                <a href="compare.html">
+                                                                    <i class="fa fa-link"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button quick-view">
+                                                                <a href="quick_view.html">
+                                                                    <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-info">
+                                                    <div class="info-inner">
+                                                        <div class="item-title">
+                                                            <a title="Product title here" href="@url">@item.Name </a>
+                                                        </div>
+                                                        <div class="item-content">
+                                                            <div class="rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                            </div>
+                                                            <div class="item-price">
+                                                                <div class="price-box">
+                                                                    @if (item.PromotionPrice.HasValue)
+                                                                    {
+                                                                        <p class="special-price">
+                                                                            <span class="price"> @item.PromotionPrice.Value.ToString("N0") </span>
+                                                                        </p>
+                                                                        <p class="old-price">
+                                                                            <span class="price"> @item.Price.ToString("N0") </span>
+                                                                        </p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="regular-price">
+                                                                            <span class="price">@item.Price.ToString("N0")</span>
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div class="pro-action">
+                                                                <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
+                                                                    <span> Mua ngay</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- HotFlag -->
+<div class="container">
+    <div class="home-tab">
+        <div class="tab-title text-left">
+            <h2>Hot Nhất</h2>
+            <ul class="nav home-nav-tabs home-product-tabs">
+                @for (var i = 0; i < Model.HomeCategories.Count; i++)
+                {
+                    var item = Model.HomeCategories[i];
+                    if (i == 0)
+                    {
+                        <li class="active">
+                            <a href="#@item.SeoAlias-hotflag" data-toggle="tab" aria-expanded="false">@item.Name</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a href="#@item.SeoAlias-hotflag" data-toggle="tab" aria-expanded="false">@item.Name</a>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+        <div id="productHotFlagTabContent" class="tab-content">
+            @for (var i = 0; i < Model.HomeCategories.Count; i++)
+            {
+                var category = Model.HomeCategories[i];
+                string css = string.Empty;
+                if (i == 0)
+                {
+                    css = "tab-pane active in";
+                }
+                else
+                {
+                    css = "tab-pane wow fadeInLeft";
+                }
+                <div class="@css" id="@category.SeoAlias-hotflag">
+                    <div class="featured-pro">
+                        <div class="slider-items-products">
+                            <div id="computer-slider" class="product-flexslider hidden-buttons">
+                                <div class="slider-items slider-width-col4">
+                                    @foreach (var item in ProductService.GetHotProductByCategoryId(category.Id, 5))
+                                    {
+                                        var urlImage = $"/uploaded/images/products/{item.Image}?w=265&h=309";
+                                        var url = $"/{item.SeoAlias}-p.{item.Id}.html";
+
+                                        <div class="product-item">
+                                            <div class="item-inner">
+                                                <div class="product-thumbnail">
+                                                    @if (item.HotFlag)
+                                                    {
+                                                        <div class="icon-sale-label sale-left">Hot</div>
+                                                    }
+                                                    @if ((DateTime.Now - item.DateCreated.Value).Days <= 7)
+                                                    {
+                                                        <div class="icon-new-label new-right">Mới</div>
+                                                    }
+                                                    <div class="pr-img-area">
+                                                        <a title="@item.Name" href="@url">
+                                                            <figure>
+                                                                <img class="first-img" src="@urlImage" alt="@item.Name">
+                                                                <img class="hover-img" src="@urlImage" alt="@item.Name">
+                                                            </figure>
+                                                        </a>
+                                                    </div>
+                                                    <div class="pr-info-area">
+                                                        <div class="pr-button">
+                                                            <div class="mt-button add_to_wishlist">
+                                                                <a href="wishlist.html">
+                                                                    <i class="fa fa-heart-o"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button add_to_compare">
+                                                                <a href="compare.html">
+                                                                    <i class="fa fa-link"></i>
+                                                                </a>
+                                                            </div>
+                                                            <div class="mt-button quick-view">
+                                                                <a href="quick_view.html">
+                                                                    <i class="fa fa-search"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="item-info">
+                                                    <div class="info-inner">
+                                                        <div class="item-title">
+                                                            <a title="Product title here" href="@url">@item.Name </a>
+                                                        </div>
+                                                        <div class="item-content">
+                                                            <div class="rating">
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                                <i class="fa fa-star-o"></i>
+                                                            </div>
+                                                            <div class="item-price">
+                                                                <div class="price-box">
+                                                                    @if (item.PromotionPrice.HasValue)
+                                                                    {
+                                                                        <p class="special-price">
+                                                                            <span class="price"> @item.PromotionPrice.Value.ToString("N0") </span>
+                                                                        </p>
+                                                                        <p class="old-price">
+                                                                            <span class="price"> @item.Price.ToString("N0") </span>
+                                                                        </p>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <span class="regular-price">
+                                                                            <span class="price">@item.Price.ToString("N0")</span>
+                                                                        </span>
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                            <div class="pro-action">
+                                                                <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
+                                                                    <span> Mua ngay</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- Blog -->
+<section class="blog-post-wrapper">
+    <div class="container">
+        <div class="best-title text-left">
+            <h2>Tin tức mới nhất</h2>
+        </div>
+        <div class="slider-items-products">
+            <div id="latest-news-slider" class="product-flexslider hidden-buttons">
+                <div class="slider-items slider-width-col6">
+                    @foreach (var item in Model.LastestBlogs)
+                    {
+                        var url = $"{item.SeoAlias}-b.{item.Id}.html";
+                        var urlImage = $"/uploaded/images/blogs/{item.Image}?w=260&h=162";
+
+                        <div class="item">
+                            <div class="blog-box">
+                                <a href="@url">
+                                    <img class="primary-img" src="@urlImage" alt="@item.Name">
+                                </a>
+                                <div class="blog-btm-desc">
+                                    <div class="blog-top-desc">
+                                        <h4><a href="@url" class="blog_title">@item.Name</a></h4>
+                                        <div class="jtv-entry-meta">
+                                            <i class="fa fa-clock-o"></i> <strong>@item.DateCreated.Value.ToString("d")</strong>
+                                            <a href="#"><i class="fa fa-commenting-o"></i> <strong>15 Bình luận</strong></a>
+                                        </div>
+                                    </div>
+                                    <div class="blog_description">@item.Description</div>
+                                    <a class="read-more" href="@url"> Đọc thêm</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- our clients Slider -->
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-xs-12">
+            <div class="our-clients">
+                <div class="slider-items-products">
+                    <div id="our-clients-slider" class="product-flexslider hidden-buttons">
+                        <div class="slider-items slider-width-col6">
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand1.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand2.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand3.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand4.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand5.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand6.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand7.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand8.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand9.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand10.png" alt="Image"></a> </div>
+                            <div class="item"><a href="#"><img src="~/client-side/images/brand11.png" alt="Image"></a> </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="footer-newsletter">
+    <div class="container">
+        <div class="row">
+            <!-- Newsletter -->
+            <div class="col-md-6 col-sm-6">
+                <form id="newsletter-validate-detail" method="post" action="#">
+                    <h3>Join Our Newsletter</h3>
+                    <div class="title-divider"><span></span></div>
+                    <p class="sub-title text-center">Get 25% off</p>
+                    <div class="newsletter-inner">
+                        <input class="newsletter-email" name='Email' placeholder='Enter Your Email' />
+                        <button class="button subscribe" type="submit" title="Subscribe">Subscribe</button>
+                    </div>
+                </form>
+            </div>
+            <!-- Customers Box -->
+            <div class="col-sm-6 col-xs-12 testimonials">
+                <div class="page-header">
+                    <h2>What Our Customers Say</h2>
+                </div>
+                <div class="slider-items-products">
+                    <div id="testimonials-slider" class="product-flexslider hidden-buttons home-testimonials">
+                        <div class="slider-items slider-width-col4 ">
+                            <div class="holder">
+                                <blockquote>
+                                    Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+                                    minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip volutpat.
+                                    Integer rutrum ante eu lacus.Vestibulum libero nisl, porta vel.
+                                </blockquote>
+                                <div class="thumb"> <img src="~/client-side/images/testimonials-img3.jpg" alt="testimonials img"> </div>
+                                <div class="holder-info"> <strong class="name">John Doe</strong> <strong class="designation">CEO, Company</strong></div>
+                            </div>
+                            <div class="holder">
+                                <blockquote>Lorem ipsum dolor sit ame consetur adipisicing elit. Voluptate, consetur adipisicing elit.Lorem ipsum dolor sit ame consetur adipisicing elit.Lorem ipsum dolor sit ame consetur adipisicing elit. Voluptate, consetur adipisicing elit.</blockquote>
+                                <div class="thumb"> <img src="~/client-side/images/testimonials-img1.jpg" alt="testimonials img"> </div>
+                                <div class="holder-info"> <strong class="name">Vince Roy</strong> <strong class="designation">CEO, Newspaper</strong> </div>
+                            </div>
+                            <div class="holder">
+                                <blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. Donec sit amet eros. Cras feugiat luctus nulla vitae posuere. Suspendisse potenti. </blockquote>
+                                <div class="thumb"> <img src="~/client-side/images/testimonials-img2.jpg" alt="testimonials img"> </div>
+                                <div class="holder-info"><strong class="name">John Doe</strong> <strong class="designation">CEO, ABC Softwear</strong></div>
+                            </div>
+                            <div class="holder">
+                                <blockquote>Aliquam erat volutpat. Sed do eiusmod tempor incididunt Integer rutrum ante eu lacus. Vestibulum libero nisl, porta vel, scelerisque eget. Donec sit amet eros. Nulla non ornare nisi, sed condimentum lorem. Morbi sed vehicula magna.</blockquote>
+                                <div class="thumb"> <img src="~/client-side/images/testimonials-img4.jpg" alt="testimonials img"> </div>
+                                <div class="holder-info"> <strong class="name">Vince Roy</strong> <strong class="designation">CEO, XYZ Softwear</strong></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/client-side/app/controllers/home/index.js" asp-append-version="true"></script>
+    <script type='text/javascript'>
+        var home = new HomeController();
+        home.initialize();
+    </script>
+}

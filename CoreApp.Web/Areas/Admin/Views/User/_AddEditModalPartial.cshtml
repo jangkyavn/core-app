@@ -1,0 +1,137 @@
+﻿<div class="modal fade text-left" id="addEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="userForm">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="txtId" value="" />
+                    <input type="hidden" id="txtDateCreated" value="" />
+                    <input type="hidden" id="txtAvatar" value="" />
+
+                    <ul class="nav nav-tabs nav-underline no-hover-bg">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="base-tab31" data-toggle="tab" aria-controls="tab31"
+                               href="#tab31" aria-expanded="true">Thông tin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="base-tab32" data-toggle="tab" aria-controls="tab32" href="#tab32"
+                               aria-expanded="false">Quyền</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content px-1 pt-1">
+                        <div role="tabpanel" class="tab-pane active" id="tab31" aria-expanded="true" aria-labelledby="base-tab31">
+                            <div class="card">
+                                <div class="card-header" id="heading-links">
+                                    <h4 class="card-title">Thông tin người dùng</h4>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="form-body col-12 col-md-4 text-center">
+                                            <img src="" id="iAvatar" style="width: 200px; height: 200px;" />
+                                            <input type="file" id="fUploadFile" style="display: none;" />
+                                            <button type="button" class="btn btn-primary mt-1" id="btnSelectFile">
+                                                <i class="fa fa-upload"></i> Chọn ảnh
+                                            </button>
+                                        </div>
+                                        <div class="form-body col-12 col-md-8">
+                                            <div class="form-group">
+                                                <label for="txtUserName">Tên đăng nhập *</label>
+                                                <input type="text" id="txtUserName" class="form-control" placeholder="Nhập tên đăng nhập" name="userName">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="txtEmail">Email *</label>
+                                                <input type="text" id="txtEmail" class="form-control" placeholder="Nhập email" name="email">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="txtFullName">Họ tên</label>
+                                                <input type="text" id="txtFullName" class="form-control" placeholder="Nhập họ tên" name="fullName">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="wrapPassword">
+                                        <div class="form-group col-12 col-md-6">
+                                            <label for="txtPassword">Mật khẩu</label>
+                                            <input type="password" id="txtPassword" class="form-control" placeholder="Nhập mật khẩu" name="password">
+                                        </div>
+                                        <div class="form-group col-12 col-md-6">
+                                            <label for="txtConfirmPassword">Xác nhận mật khẩu</label>
+                                            <input type="password" id="txtConfirmPassword" class="form-control" placeholder="Nhập xác nhận mật khẩu" name="confirmPassword">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-12 col-md-6">
+                                            <label for="txtBirthDay">Ngày sinh</label>
+                                            <input type="date" id="txtBirthDay" class="form-control" name="birthDay">
+                                        </div>
+                                        <div class="form-group col-12 col-md-6">
+                                            <label for="txtPhoneNumber">Số điện thoại</label>
+                                            <input type="text" id="txtPhoneNumber" class="form-control" placeholder="Nhập số điện thoại" name="phoneNumber">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-12">
+                                            <label for="txtConfirmPassword">Địa chỉ</label>
+                                            <textarea id="txtAddress" class="form-control col-12" placeholder="Nhập địa chỉ" name="address"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-12 col-md-6">
+                                            <label for="txtBirthDay">Giới tính</label>
+                                            <fieldset>
+                                                <div class="float-left">
+                                                    <input type="checkbox" class="switch" data-on-label="Nam" data-off-label="Nữ" id="chkGender" name="gender" checked="checked" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                        <div class="form-group col-12 col-md-6">
+                                            <label for="txtPhoneNumber">Trạng thái</label>
+                                            <fieldset>
+                                                <div class="float-left">
+                                                    <input type="checkbox" class="switch" data-on-label="Kích hoạt" data-off-label="Khóa" id="chkStatus" name="status" />
+                                                </div>
+                                            </fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab32" aria-labelledby="base-tab32">
+                            <div class="card">
+                                <div class="card-header" id="heading-links">
+                                    <h4 class="card-title">Quyền người dùng</h4>
+                                </div>
+                                <div class="card-body" id="rolesContent">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-light" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="rolesTemplate" type="x-tmpl-mustache">
+    @*<div class="checkbox">
+            <label>
+                <input type="checkbox" {{Checked}} value="{{Name}}" name="ckRoles">
+                <span class="text">{{Description}}</span>
+            </label>
+        </div>*@
+    <div class="custom-control custom-checkbox mb-1">
+        <input type="checkbox" class="custom-control-input" id="chkRole{{Id}}" {{Checked}} value="{{Name}}" name="roles">
+        <label class="custom-control-label" for="chkRole{{Id}}">{{Name}}</label>
+    </div>
+</script>

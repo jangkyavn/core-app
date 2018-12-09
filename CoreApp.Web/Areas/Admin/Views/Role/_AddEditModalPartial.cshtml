@@ -1,0 +1,43 @@
+﻿<div class="modal fade text-left" id="addEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="roleForm">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="txtId" value="" />
+
+                    <div class="card">
+                        <div class="card-header" id="heading-links">
+                            <h4 class="card-title">Thông tin người dùng</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="form-body col-12">
+                                    <div class="form-group">
+                                        <label for="txtName">Tên vai trò *</label>
+                                        <input type="text" id="txtName" class="form-control" placeholder="Nhập tên vai trò" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtDescription">Mô tả *</label>
+                                        <input type="text" id="txtDescription" class="form-control" placeholder="Nhập mô tả" name="description">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-light" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>

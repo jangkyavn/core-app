@@ -1,0 +1,91 @@
+﻿@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@{
+    var canUpdate = (await AuthorizationService.AuthorizeAsync(User, "FUNCTION", Operations.Update)).Succeeded;
+    var canDelete = (await AuthorizationService.AuthorizeAsync(User, "FUNCTION", Operations.Delete)).Succeeded;
+}
+
+
+@section Styles {
+    <link href="~/lib/jstree/dist/themes/default/style.css" rel="stylesheet" />
+    <link href="~/admin-side/css/plugins/forms/switch.min.css" rel="stylesheet" />
+    <link href="~/admin-side/vendors/css/forms/selects/select2.min.css" rel="stylesheet" />
+    <style type="text/css">
+        #txtKeyword {
+            width: 75%;
+        }
+
+        #ddlIcon {
+            font-family: feather;
+        }
+    </style>
+}
+
+<input type="hidden" id="hidCanUpdate" value="@canUpdate" />
+<input type="hidden" id="hidCanDelete" value="@canDelete" />
+
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row">
+            <div class="content-header-left col-md-6 col-12 mb-2">
+                <h3 class="content-header-title">Chức năng</h3>
+            </div>
+            <div class="content-header-right col-md-6 col-12">
+                <button type="button" class="btn btn-info float-md-right ml-1" id="btnCollapseTree" data-toggle="tooltip" data-placement="top" title="Thu gọn">
+                    <i class="fa fa-compress"></i>
+                </button>
+                <button type="button" class="btn btn-primary float-md-right ml-1" id="btnExpandTree" data-toggle="tooltip" data-placement="top" title="Mở rộng">
+                    <i class="fa fa-expand"></i>
+                </button>
+                @if ((await AuthorizationService.AuthorizeAsync(User, "FUNCTION", Operations.Create)).Succeeded)
+                {
+                    <button type="button" class="btn btn-success float-md-right" id="btnAddNew">
+                        <i class="fa fa-plus"></i> Thêm mới
+                    </button>
+                }
+            </div>
+        </div>
+        <div class="content-body">
+            <!-- Responsive tables start -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="row d-flex justify-content-between mx-1">
+                                <input type="text" class="form-control" id="txtKeyword" placeholder="Nhập từ khóa cần tìm" />
+                                <button class="btn btn-primary" id="btnSearch">
+                                    <i class="fa fa-search"></i> Tìm kiếm
+                                </button>
+                                <button class="btn btn-default" id="btnRefresh">
+                                    <i class="fa fa-refresh"></i> Làm mới
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="container" id="treeContainer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Responsive tables end -->
+        </div>
+    </div>
+</div>
+
+<partial name="_AddEditModalPartial" />
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
+    <script src="~/lib/jstree/dist/jstree.js"></script>
+    <script src="~/admin-side/vendors/js/forms/toggle/bootstrap-checkbox.min.js"></script>
+    <script src="~/admin-side/js/scripts/forms/switch.min.js"></script>
+    <script src="~/admin-side/vendors/js/forms/select/select2.full.min.js"></script>
+    <script src="~/admin-side/app/controllers/function/index.js" asp-append-version="true"></script>
+    <script>
+        var functionObj = new FunctionController();
+        functionObj.initialize();
+    </script>
+}

@@ -1,0 +1,111 @@
+﻿<div class="modal fade text-left" id="addEditModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-primary white">
+                <h4 class="modal-title" id="modalTitle"></h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form row" id="productCategoryForm">
+                    @Html.AntiForgeryToken()
+
+                    <input type="hidden" id="txtId" value="0"  />
+                    <input type="hidden" id="txtDateCreated" value="" />
+                    <input type="hidden" id="txtSortOrder" value="0" />
+
+                    <div class="col-md-8 col-sm-12">
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Thông tin danh mục</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-body">
+                                    <div class="form-group row">
+                                        <label for="txtSeoAlias" class="col-3 col-form-label">Đường dẫn SEO</label>
+                                        <div class="col-9">
+                                            <input type="text" readonly class="form-control-plaintext" id="txtSeoAlias" value="https://localhost:44328/">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtName">Tên danh mục *</label>
+                                        <input type="text" id="txtName" class="form-control" placeholder="Nhập tên danh mục" name="name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtDescription">Mô tả</label>
+                                        <textarea type="text" id="txtDescription" class="form-control" placeholder="Nhập mô tả" name="description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Tối ưu SEO</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-body">
+                                    <div class="form-group">
+                                        <label for="txtSeoPageTitle">Tiêu đề SEO</label>
+                                        <input type="text" id="txtSeoPageTitle" class="form-control" placeholder="Nhập tiêu đề SEO" name="seoPageTitle">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtSeoKeywords">Từ khóa SEO</label>
+                                        <input type="text" id="txtSeoKeywords" class="form-control" placeholder="Nhập từ khóa SEO" name="seoKeywords">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="txtSeoDescription">Mô tả SEO</label>
+                                        <input type="text" id="txtSeoDescription" class="form-control" placeholder="Nhập mô tả SEO" name="seoDescription">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12">
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Danh mục cha</h4>
+                            </div>
+                            <div class="card-body">
+                                <select id="ddlParent" class="form-control" name="parentId"></select>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Ảnh danh mục</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="fImage">
+                                    <label class="custom-file-label" id="lblImage" for="fImage">Chọn ảnh</label>
+                                </div>
+                                <div id="wrapImage" style="display:none;">
+                                    <img src="" class="img-thumbnail mt-2" id="iImage" alt="Ảnh xem trước" />
+                                    <a href="#" class="btn btn-float btn-round btn-secondary btn-sm" id="btnRemoveImage">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header" id="heading-links">
+                                <h4 class="card-title">Trạng thái</h4>
+                            </div>
+                            <div class="card-body">
+                                <fieldset>
+                                    <div class="float-left">
+                                        <input type="checkbox" class="switch" data-on-label="Kích hoạt" data-off-label="Khóa" id="chkStatus" name="status" />
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn grey btn-light" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
