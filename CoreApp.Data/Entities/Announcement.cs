@@ -3,7 +3,6 @@ using CoreApp.Data.Interfaces;
 using CoreApp.Infrastructure.SharedKernel;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace CoreApp.Data.Entities
 {

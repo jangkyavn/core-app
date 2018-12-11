@@ -1,9 +1,14 @@
 ﻿using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
+using CoreApp.Data.Enums;
+using CoreApp.Utilities.Constants;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +19,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
     public class RoleController : BaseController
     {
         private readonly IRoleService _roleService;
+        private readonly IAnnouncementService _announcementService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
 
         public RoleController(IRoleService roleService,
-            IAuthorizationService authorizationService)
+            IAnnouncementService announcementService,
+            IAuthorizationService authorizationService,
+            IHubContext<CoreHub, ICoreHub> hubContext)
         {
             _roleService = roleService;
+            _announcementService = announcementService;
             _authorizationService = authorizationService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -107,6 +118,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 var result = await _authorizationService.AuthorizeAsync(User, "ROLE", Operations.Update);
                 if (result.Succeeded == false)
                     return StatusCode(401);
+
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Cập nhật vai trò có tên là: {roleVm.Name}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Cập nhật",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
                 await _roleService.UpdateAsync(roleVm);
                 isAddNew = false;

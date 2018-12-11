@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
+using CoreApp.Application.Extensions;
 using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
 using CoreApp.Data.Entities;
 using CoreApp.Data.IRepositories;
 using CoreApp.Infrastructure.Interfaces;
+using CoreApp.Utilities.Constants;
 using CoreApp.Utilities.Dtos;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,22 +20,49 @@ namespace CoreApp.Application.Implementation
     public class AnnouncementService : IAnnouncementService
     {
         private readonly IAnnouncementRepository _announcementRepository;
+        private readonly IAnnouncementUserRepository _announcementUserRepository;
+        private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public AnnouncementService(IAnnouncementRepository announcementRepository,
+            IAnnouncementUserRepository announcementUserRepository,
+            UserManager<AppUser> userManager,
             IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _announcementRepository = announcementRepository;
+            _announcementUserRepository = announcementUserRepository;
+            _userManager = userManager;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
 
-        public void Add(AnnouncementViewModel viewModel)
+        public async Task AddAsync(AnnouncementViewModel viewModel)
         {
-            var model = _mapper.Map<AnnouncementViewModel, Announcement>(viewModel);
-            _announcementRepository.Add(model);
+            var announcement = new Announcement();
+            viewModel.UpdateAnnouncementModel(announcement);
+            _announcementRepository.Add(announcement);
+
+            var exceptedUsers = _userManager.Users.Where(x => x.Id != viewModel.UserId);
+            foreach (var item in exceptedUsers)
+            {
+                var roles = await _userManager.GetRolesAsync(item);
+                if (roles.Any(x => x == CommonConstants.UserRoles.AdminRole || x == CommonConstants.UserRoles.StaffRole))
+                {
+                    var announcementUser = new AnnouncementUser()
+                    {
+                        CreatorId = viewModel.UserId,
+                        ReaderId = item.Id,
+                        AnnouncementId = viewModel.Id,
+                        HasRead = false
+                    };
+
+                    _announcementUserRepository.Add(announcementUser);
+                }
+            }
+
+            _unitOfWork.Commit();
         }
 
         public async Task DeleteAsync(string id)
@@ -61,9 +92,23 @@ namespace CoreApp.Application.Implementation
                 .ToListAsync();
         }
 
-        public async Task<PagedResult<AnnouncementViewModel>> GetAllPagingAsync(string keyword, int page, int pageSize)
+        public async Task<PagedResult<AnnouncementViewModel>> GetAllPagingAsync(string keyword, Guid userId, int page, int pageSize)
         {
-            var query = _announcementRepository.FindAll();
+            var query = from a in _announcementRepository.FindAll()
+                        join au in _announcementUserRepository.FindAll() on a.Id equals au.AnnouncementId
+                        join u in _userManager.Users on a.UserId equals u.Id
+                        where a.UserId != new Guid("b42451f1-17e9-4f09-2b58-08d64a33c29b") && au.ReaderId == new Guid("b42451f1-17e9-4f09-2b58-08d64a33c29b")
+                        select new AnnouncementViewModel()
+                        {
+                            Id = a.Id,
+                            Title = a.Title,
+                            Content = a.Content,
+                            FullName = u.FullName,
+                            Avatar = u.Avatar,
+                            DateCreated = a.DateCreated,
+                            HasRead = au.HasRead.Value,
+                            Status = a.Status
+                        };
 
             if (!string.IsNullOrEmpty(keyword))
             {
@@ -73,17 +118,14 @@ namespace CoreApp.Application.Implementation
             }
 
             var totalRow = query.Count();
-            query = query.OrderBy(x => x.Status)
-                .OrderByDescending(x => x.DateCreated);
+            query = query.OrderByDescending(x => x.DateCreated);
 
             if (pageSize != -1)
             {
                 query = query.Skip((page - 1) * pageSize).Take(pageSize);
             }
 
-            var data = await query
-                .ProjectTo<AnnouncementViewModel>(_mapper.ConfigurationProvider)
-                .ToListAsync();
+            var data = await query.ToListAsync();
 
             return new PagedResult<AnnouncementViewModel>()
             {
@@ -98,6 +140,18 @@ namespace CoreApp.Application.Implementation
         {
             var model = await _announcementRepository.FindByIdAsync(id);
             return _mapper.Map<Announcement, AnnouncementViewModel>(model);
+        }
+
+        public void MaskAsRead(Guid userId, string id)
+        {
+            var announcementUser = _announcementUserRepository.FindSingle(x => x.AnnouncementId == id && x.ReaderId == new Guid("b42451f1-17e9-4f09-2b58-08d64a33c29b"));
+
+            if (announcementUser.HasRead == false)
+            {
+                announcementUser.HasRead = true;
+                _announcementUserRepository.Update(announcementUser);
+                _unitOfWork.Commit();
+            }
         }
 
         public void SaveChanges()
