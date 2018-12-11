@@ -31889,3 +31889,37 @@ OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY" (0723d8ff)
 2018-12-11T11:16:59.7882932+07:00 0HLIV3N829LR8:00000018 [INF] Request starting HTTP/1.1 POST http://localhost:44328/coreHub?id=8yXhRNZKiMSAQ_ml9RMy8A text/plain;charset=UTF-8 11 (ca22a1cb)
 2018-12-11T11:16:59.7882932+07:00 0HLIV3N829LR8:00000018 [INF] Policy execution successful. (0204925d)
 2018-12-11T11:16:59.7892933+07:00 0HLIV3N829LR8:00000018 [INF] Request finished in 0.7886ms 200 text/plain (791a596a)
+2018-12-11T11:18:59.1581208+07:00 0HLIV3V30PNRG:00000001 [INF] Request starting HTTP/1.1 GET http://localhost:44328/Admin/Announcement/GetAllPaging?page=1&pageSize=10   (ca22a1cb)
+2018-12-11T11:18:59.4501375+07:00 0HLIV3V30PNRG:00000001 [INF] Route matched with "{area = \"Admin\", action = \"GetAllPaging\", controller = \"Announcement\"}". Executing action "CoreApp.Web.Areas.Admin.Controllers.AnnouncementController.GetAllPaging (CoreApp.Web)" (a44c0341)
+2018-12-11T11:18:59.4631382+07:00 0HLIV3V30PNRG:00000001 [INF] Authorization was successful. (0d575a54)
+2018-12-11T11:18:59.4941400+07:00 0HLIV3V30PNRG:00000001 [INF] Executing action method "CoreApp.Web.Areas.Admin.Controllers.AnnouncementController.GetAllPaging (CoreApp.Web)" with arguments (["", "1", "10"]) - Validation state: Valid (4e3479ed)
+2018-12-11T11:18:59.5041406+07:00 0HLIV3V30PNRG:00000001 [INF] Entity Framework Core "2.1.4-rtm-31024" initialized '"AppDbContext"' using provider '"Microsoft.EntityFrameworkCore.SqlServer"' with options: "MigrationsAssembly=CoreApp.Data.EF " (9958f5bb)
+2018-12-11T11:18:59.5911455+07:00 0HLIV3V30PNRG:00000001 [INF] Executed DbCommand ("12"ms) [Parameters=["@__functionId_1='?' (Size = 50) (DbType = AnsiString)"], CommandType='Text', CommandTimeout='30']"
+""SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [Functions] AS [f]
+        INNER JOIN [Permissions] AS [p] ON [f].[Id] = [p].[FunctionId]
+        INNER JOIN [AppRoles] AS [r] ON [p].[RoleId] = [r].[Id]
+        WHERE ([r].[Name] IN (N'Admin') AND ([f].[Id] = @__functionId_1)) AND ([p].[CanRead] = 1))
+    THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT)
+END" (0723d8ff)
+2018-12-11T11:18:59.6051463+07:00 0HLIV3V30PNRG:00000001 [INF] Authorization was successful. (0d575a54)
+2018-12-11T11:18:59.6411484+07:00 0HLIV3V30PNRG:00000001 [INF] Executed DbCommand ("0"ms) [Parameters=["@__userId_0='?' (DbType = Guid), @__userId_1='?' (DbType = Guid)"], CommandType='Text', CommandTimeout='30']"
+""SELECT COUNT(*)
+FROM [Announcements] AS [a]
+INNER JOIN [AnnouncementUsers] AS [au] ON [a].[Id] = [au].[AnnouncementId]
+INNER JOIN [AppUsers] AS [u] ON [a].[UserId] = [u].[Id]
+WHERE ([a].[UserId] <> @__userId_0) AND ([au].[ReaderId] = @__userId_1)" (0723d8ff)
+2018-12-11T11:18:59.6721502+07:00 0HLIV3V30PNRG:00000001 [INF] Executed DbCommand ("9"ms) [Parameters=["@__userId_0='?' (DbType = Guid), @__userId_1='?' (DbType = Guid), @__p_2='?' (DbType = Int32), @__p_3='?' (DbType = Int32)"], CommandType='Text', CommandTimeout='30']"
+""SELECT [a].[Id], [a].[Title], [a].[Content], [u].[FullName], [u].[Avatar], [a].[DateCreated], [au].[HasRead], [a].[Status]
+FROM [Announcements] AS [a]
+INNER JOIN [AnnouncementUsers] AS [au] ON [a].[Id] = [au].[AnnouncementId]
+INNER JOIN [AppUsers] AS [u] ON [a].[UserId] = [u].[Id]
+WHERE ([a].[UserId] <> @__userId_0) AND ([au].[ReaderId] = @__userId_1)
+ORDER BY [a].[DateCreated] DESC
+OFFSET @__p_2 ROWS FETCH NEXT @__p_3 ROWS ONLY" (0723d8ff)
+2018-12-11T11:18:59.6891511+07:00 0HLIV3V30PNRG:00000001 [INF] Executed action method "CoreApp.Web.Areas.Admin.Controllers.AnnouncementController.GetAllPaging (CoreApp.Web)", returned result "Microsoft.AspNetCore.Mvc.OkObjectResult" in 191.4833ms. (50a9e262)
+2018-12-11T11:18:59.6991517+07:00 0HLIV3V30PNRG:00000001 [INF] Executing ObjectResult, writing value of type '"CoreApp.Utilities.Dtos.PagedResult`1[[CoreApp.Application.ViewModels.AnnouncementViewModel, CoreApp.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]"'. (8a1b66c8)
+2018-12-11T11:18:59.7551549+07:00 0HLIV3V30PNRG:00000001 [INF] Executed action "CoreApp.Web.Areas.Admin.Controllers.AnnouncementController.GetAllPaging (CoreApp.Web)" in 301.4037ms (afa2e885)
+2018-12-11T11:18:59.7801563+07:00 0HLIV3V30PNRG:00000001 [INF] Request finished in 627.4198ms 200 application/json; charset=utf-8 (791a596a)
