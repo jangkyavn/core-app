@@ -31,6 +31,7 @@ namespace CoreApp.Web.Extensions
             services.AddScoped<IUserClaimsPrincipalFactory<AppUser>, CustomClaimsPrincipalFactory>();
 
             services.AddTransient<IAnnouncementRepository, AnnouncementRepository>();
+            services.AddTransient<IAnnouncementUserRepository, AnnouncementUserRepository>();
             services.AddTransient<IBillDetailRepository, BillDetailRepository>();
             services.AddTransient<IBillRepository, BillRepository>();
             services.AddTransient<IBlogRepository, BlogRepository>();

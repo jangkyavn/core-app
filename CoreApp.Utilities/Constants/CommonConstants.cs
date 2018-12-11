@@ -13,6 +13,7 @@
         public class UserRoles
         {
             public const string AdminRole = "Admin";
+            public const string StaffRole = "Staff";
         }
 
         public class UserClaims

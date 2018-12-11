@@ -25,8 +25,6 @@ var roleController = function () {
                     Description: $('#txtDescription').val()
                 };
 
-                console.log(data);
-
                 core.callAjax('/Admin/Role/SaveEntity', 'POST', data, 'json', function (res) {
                     if (res) {
                         core.notify(message.add_success, 'success');
@@ -88,7 +86,6 @@ var roleController = function () {
         $("#btnSavePermission").on('click', function () {
             var listPermmission = [];
             $.each($('#tblFunction tbody tr'), function (i, item) {
-                console.log($(item).data('id'));
                 listPermmission.push({
                     RoleId: $('#hidRoleId').val(),
                     FunctionId: $(item).data('id'),
@@ -447,7 +444,6 @@ var roleController = function () {
             $('#txtName').val(res.Name);
             $('#txtDescription').val(res.Description);
 
-            console.log(res);
             callBack();
         });
     };

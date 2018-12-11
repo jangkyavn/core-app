@@ -34,6 +34,16 @@ namespace CoreApp.Application.Extensions
             size.Name = sizeViewModel.Name;
         }
 
+        public static void UpdateAnnouncementModel(this AnnouncementViewModel announcementViewModel, Announcement announcement)
+        {
+            announcement.Id = announcementViewModel.Id;
+            announcement.Title = announcementViewModel.Title;
+            announcement.Content = announcementViewModel.Content;
+            announcement.UserId = announcementViewModel.UserId;
+            announcement.DateCreated = announcementViewModel.DateCreated.Value;
+            announcement.Status = announcementViewModel.Status;
+        }
+
         public static void UpdateFunctionModel(this FunctionViewModel functionViewModel, Function function)
         {
             function.Id = functionViewModel.Id;

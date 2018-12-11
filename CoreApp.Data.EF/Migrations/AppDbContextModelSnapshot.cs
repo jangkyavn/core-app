@@ -137,9 +137,11 @@ namespace CoreApp.Data.EF.Migrations
                         .HasMaxLength(50)
                         .IsUnicode(false);
 
+                    b.Property<Guid>("CreatorId");
+
                     b.Property<bool?>("HasRead");
 
-                    b.Property<Guid>("UserId");
+                    b.Property<Guid>("ReaderId");
 
                     b.HasKey("Id");
 

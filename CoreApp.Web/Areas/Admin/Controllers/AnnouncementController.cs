@@ -1,5 +1,6 @@
 ﻿using CoreApp.Application.Interfaces;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -36,8 +37,8 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             if (result.Succeeded == false)
                 return StatusCode(401);
 
-            var viewModel = await _announcementService.GetAllAsync();
-            return new OkObjectResult(viewModel);
+            var viewModels = await _announcementService.GetAllAsync();
+            return new OkObjectResult(viewModels);
         }
 
         [HttpGet]
@@ -47,8 +48,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             if (result.Succeeded == false)
                 return StatusCode(401);
 
-            var viewModel = await _announcementService.GetAllPagingAsync(keyword, page, pageSize);
-            return new OkObjectResult(viewModel);
+            var data = await _announcementService.GetAllPagingAsync(keyword, User.GetUserId(), page, pageSize);
+            return new OkObjectResult(data);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> MaskAsRead(string id)
+        {
+            var result = await _authorizationService.AuthorizeAsync(User, "ANNOUNCEMENT", Operations.Update);
+            if (result.Succeeded == false)
+                return StatusCode(401);
+
+            _announcementService.MaskAsRead(User.GetUserId(), id);
+            return new OkObjectResult(true);
         }
 
         [HttpPost]

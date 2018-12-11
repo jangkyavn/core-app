@@ -2,6 +2,7 @@
 using CoreApp.Data.EF;
 using CoreApp.Data.Entities;
 using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,6 +68,19 @@ namespace CoreApp.Web
                     });
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
+
+            services.AddCors(options => options.AddPolicy("CorsPolicy",
+                builder =>
+                {
+                    builder.AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .WithOrigins("https://localhost:44328")
+                        .AllowCredentials();
+                }));
+
+            services.AddSignalR().AddJsonProtocol(options => {
+                options.PayloadSerializerSettings.ContractResolver = new DefaultContractResolver();
+            });
 
             services.Configure<RequestLocalizationOptions>(options =>
             {
@@ -165,6 +179,12 @@ namespace CoreApp.Web
 
             var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(options.Value);
+
+            app.UseCors("CorsPolicy");
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<CoreHub>("/coreHub");
+            });
 
             app.UseRoute();
         }

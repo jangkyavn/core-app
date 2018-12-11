@@ -13,9 +13,15 @@ namespace CoreApp.Application.ViewModels
 
         public Guid UserId { get; set; }
 
+        public string FullName { get; set; }
+
+        public string Avatar { get; set; }
+
         public DateTime? DateCreated { get; set; }
 
         public DateTime? DateModified { get; set; }
+
+        public bool HasRead { get; set; }
 
         public Status Status { get; set; }
 

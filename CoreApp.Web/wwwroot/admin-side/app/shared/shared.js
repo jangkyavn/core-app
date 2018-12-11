@@ -49,6 +49,40 @@ var core = {
             swal.close();
         });
     },
+    getPeriod: function (input) {
+        var start = moment(input);
+        var end = moment(new Date());
+
+        var duration = moment.duration(end.diff(start));
+        var diffYear = parseInt(duration.years());
+        var diffMonth = parseInt(duration.weeks());
+        var diffWeek = parseInt(duration.weeks());
+        var diffDay = parseInt(duration.days());
+        var diffHour = parseInt(duration.hours());
+        var diffMinute = parseInt(duration.minutes());
+        var diffSecond = parseInt(duration.seconds());
+
+        var period = '';
+        if (diffYear > 0) {
+            period = diffYear + ' năm trước';
+        } else if (diffMonth > 0 && diffYear === 0) {
+            period = diffMonth + ' tháng trước';
+        } else if (diffWeek > 0 && diffMonth === 0 && diffYear === 0) {
+            period = diffWeek + ' tuần trước';
+        } else if (diffDay > 0 && diffWeek === 0 && diffMonth === 0 && diffYear === 0) {
+            period = diffDay + ' ngày trước';
+        } else if (diffHour > 0 && diffDay === 0 && diffWeek === 0 && diffMonth === 0 && diffYear === 0) {
+            period = diffHour + ' giờ trước';
+        } else if (diffMinute > 0 && diffHour === 0 && diffDay === 0 && diffWeek === 0 && diffMonth === 0 && diffYear === 0) {
+            period = diffMinute + ' phút trước';
+        } else if (diffSecond > 0 && diffMinute === 0 && diffHour === 0 && diffDay === 0 && diffWeek === 0 && diffMonth === 0 && diffYear === 0) {
+            period = "Vài giây trước";
+        } else {
+            period = 'Vừa xong';
+        }
+
+        return period;
+    },
     dateFormatJson: function (datetime) {
         if (datetime === null || datetime === '')
             return '';
@@ -212,7 +246,7 @@ $(document).ajaxSend(function (e, xhr, options) {
 'use strict';
 
 var message = {
-    
+    change_success: 'Thay đổi thành công',
     update_success: 'Cập nhật thành công',
     add_success: 'Thêm mới thành công',
     edit_success: 'Sửa thành công',

@@ -1,5 +1,6 @@
 ﻿using CoreApp.Application.ViewModels;
 using CoreApp.Utilities.Dtos;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -7,7 +8,7 @@ namespace CoreApp.Application.Interfaces
 {
     public interface IAnnouncementService
     {
-        void Add(AnnouncementViewModel viewModel);
+        Task AddAsync(AnnouncementViewModel viewModel);
 
         Task DeleteAsync(string id);
 
@@ -15,7 +16,9 @@ namespace CoreApp.Application.Interfaces
 
         Task<List<AnnouncementViewModel>> GetAllAsync();
 
-        Task<PagedResult<AnnouncementViewModel>> GetAllPagingAsync(string keyword, int page, int pageSize);
+        Task<PagedResult<AnnouncementViewModel>> GetAllPagingAsync(string keyword, Guid userId, int page, int pageSize);
+
+        void MaskAsRead(Guid userId, string id);
 
         Task<AnnouncementViewModel> GetByIdAsync(string id);
 

@@ -39,10 +39,12 @@
     <partial name="_FooterPartial" />
     <!-- BEGIN VENDOR JS-->
     <script src="~/admin-side/vendors/js/vendors.min.js" type="text/javascript"></script>
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
     <!-- BEGIN VENDOR JS-->
     <!-- BEGIN PAGE VENDOR JS-->
     <script src="~/admin-side/vendors/js/extensions/toastr.min.js"></script>
     <script src="~/admin-side/vendors/js/extensions/sweetalert.min.js"></script>
+    <script src="~/admin-side/vendors/js/extensions/moment.min.js"></script>
     <!-- END PAGE VENDOR JS-->
     <!-- BEGIN STACK JS-->
     <script src="~/admin-side/js/core/app-menu.min.js" type="text/javascript"></script>
@@ -50,19 +52,17 @@
     <script src="~/admin-side/js/scripts/customizer.min.js" type="text/javascript"></script>
     <!-- END STACK JS-->
     <environment names="Development">
+        <script src="~/lib/mustache/mustache.js"></script>
         <script src="~/admin-side/app/shared/message.js" asp-append-version="true"></script>
         <script src="~/admin-side/app/shared/core.js" asp-append-version="true"></script>
-        <script src="~/admin-side/app/controllers/base/index.js" asp-append-version="true"></script>
+        <script src="~/admin-side/app/shared/base.js" asp-append-version="true"></script>
     </environment>
     <environment names="Staging,Production">
+        <script src="~/lib/mustache/mustache.min.js"></script>
         <script src="~/admin-side/app/shared/shared.min.js"></script>
-        <script src="~/admin-side/app/controllers/base/index.min.js"></script>
+        <script src="~/admin-side/app/shared/base.min.js"></script>
     </environment>
-    
-    <script>
-        var base = new BaseController();
-        base.initialize();
-    </script>
+    <script src="~/admin-side/app/shared/notify.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

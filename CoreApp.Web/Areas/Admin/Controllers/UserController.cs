@@ -1,9 +1,13 @@
 ﻿using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
+using CoreApp.Data.Enums;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,12 +20,15 @@ namespace CoreApp.Web.Areas.Admin.Controllers
     {
         private readonly IUserService _userService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
 
         public UserController(IUserService userService,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IHubContext<CoreHub, ICoreHub> hubContext)
         {
             _userService = userService;
             _authorizationService = authorizationService;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index()
@@ -96,6 +103,15 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                     if (result.Succeeded == false)
                         return StatusCode(401);
 
+                    await _hubContext.Clients.All.ReceiveMessage(new AnnouncementViewModel()
+                    {
+                        Content = $"Updated user at: {DateTime.Now}",
+                        DateCreated = DateTime.Now,
+                        Status = Status.Active,
+                        Title = "Updated",
+                        UserId = User.GetUserId()
+                    });
+
                     await _userService.UpdateAsync(userVm);
                     isAddNew = false;
                 }
@@ -117,7 +133,7 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             }
 
             await _userService.DeleteAsync(id.Value);
-                
+
             return new OkObjectResult(id);
         }
 
