@@ -146,6 +146,7 @@ namespace CoreApp.Application.Implementation
         {
             var announcementUser = _announcementUserRepository.FindSingle(x => x.AnnouncementId == id && x.ReaderId == userId);
 
+
             if (announcementUser.HasRead == false)
             {
                 announcementUser.HasRead = true;
