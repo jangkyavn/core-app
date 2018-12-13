@@ -168,7 +168,7 @@ var core = {
             error: function (request, error) {
                 console.log(request);
                 console.log(error);
-                core.notify(message.has_error, 'error');
+                core.notify(resources.has_error, 'error');
             }
         });
     },
@@ -184,7 +184,7 @@ var core = {
             },
             error: function (res) {
                 console.log(res);
-                core.notify(message.has_error, 'error');
+                core.notify(resources.has_error, 'error');
             }
         });
     },

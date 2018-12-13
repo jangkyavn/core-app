@@ -185,8 +185,6 @@ namespace CoreApp.Data.EF.Migrations
                         .HasMaxLength(250)
                         .IsUnicode(false);
 
-                    b.Property<decimal>("Balance");
-
                     b.Property<DateTime?>("BirthDay");
 
                     b.Property<string>("ConcurrencyStamp");
@@ -284,7 +282,8 @@ namespace CoreApp.Data.EF.Migrations
 
                     b.Property<int>("ColorId");
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId");
 
@@ -631,11 +630,14 @@ namespace CoreApp.Data.EF.Migrations
                         .IsRequired()
                         .HasMaxLength(250);
 
-                    b.Property<decimal>("OriginalPrice");
+                    b.Property<decimal>("OriginalPrice")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal?>("PromotionPrice");
+                    b.Property<decimal?>("PromotionPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("SeoAlias")
                         .HasMaxLength(250)
@@ -779,6 +781,34 @@ namespace CoreApp.Data.EF.Migrations
                     b.ToTable("ProductTags");
                 });
 
+            modelBuilder.Entity("CoreApp.Data.Entities.Review", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content")
+                        .HasMaxLength(500);
+
+                    b.Property<DateTime>("DateCreated");
+
+                    b.Property<DateTime?>("DateModified");
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<int>("Rating");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
+                });
+
             modelBuilder.Entity("CoreApp.Data.Entities.Size", b =>
                 {
                     b.Property<int>("Id")
@@ -852,7 +882,8 @@ namespace CoreApp.Data.EF.Migrations
 
                     b.Property<DateTime?>("Value4");
 
-                    b.Property<decimal?>("Value5");
+                    b.Property<decimal?>("Value5")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -887,7 +918,8 @@ namespace CoreApp.Data.EF.Migrations
 
                     b.Property<int>("FromQuantity");
 
-                    b.Property<decimal>("Price");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductId");
 
@@ -1107,6 +1139,19 @@ namespace CoreApp.Data.EF.Migrations
                     b.HasOne("CoreApp.Data.Entities.Tag", "Tag")
                         .WithMany("ProductTags")
                         .HasForeignKey("TagId");
+                });
+
+            modelBuilder.Entity("CoreApp.Data.Entities.Review", b =>
+                {
+                    b.HasOne("CoreApp.Data.Entities.Product", "Product")
+                        .WithMany("Reviews")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("CoreApp.Data.Entities.AppUser", "AppUser")
+                        .WithMany("Reviews")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("CoreApp.Data.Entities.WholePrice", b =>

@@ -35,5 +35,6 @@ namespace CoreApp.Data.Entities
         public virtual ICollection<ProductImage> ProductImages { get; set; }
         public virtual ICollection<BillDetail> BillDetails { get; set; }
         public virtual ICollection<WholePrice> WholePrices { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

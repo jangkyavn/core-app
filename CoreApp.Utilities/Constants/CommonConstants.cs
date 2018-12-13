@@ -25,12 +25,5 @@
             public const string Avatar = "Avatar";
             public const string Roles = "Roles";
         }
-
-        public class ControllerName
-        {
-            public const string Function = "FUNCTION";
-            public const string User = "USER";
-
-        }
     }
 }

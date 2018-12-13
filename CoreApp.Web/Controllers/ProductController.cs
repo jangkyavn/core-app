@@ -16,6 +16,7 @@ namespace CoreApp.Web.Controllers
         private readonly IColorService _colorService;
         private readonly ISizeService _sizeService;
         private readonly ITagService _tagService;
+        private readonly IReviewService _reviewService;
         private readonly IConfiguration _configuration;
 
         public ProductController(IProductService productService,
@@ -24,6 +25,7 @@ namespace CoreApp.Web.Controllers
             IColorService colorService,
             ISizeService sizeService,
             ITagService tagService,
+            IReviewService reviewService,
             IConfiguration configuration)
         {
             _productService = productService;
@@ -32,6 +34,7 @@ namespace CoreApp.Web.Controllers
             _colorService = colorService;
             _sizeService = sizeService;
             _tagService = tagService;
+            _reviewService = reviewService;
             _configuration = configuration;
         }
 
@@ -93,6 +96,7 @@ namespace CoreApp.Web.Controllers
             model.Product = _productService.GetById(id);
             model.RelatedProducts = await _productService.GetRelatedProductsAsync(id, 5);
             model.ProductImages = _productService.GetImages(id);
+            model.Reviews = await _reviewService.GetAllAsync();
             model.Tags = _productService.GetProductTags(id);
             model.Breadcrumbs = _productService.GetBreadcrumbs(id);
 

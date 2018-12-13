@@ -34,6 +34,7 @@ namespace CoreApp.Application.AutoMapper
             CreateMap<ProductQuantityViewModel, ProductQuantity>();
             CreateMap<ProductTagViewModel, ProductTag>();
             CreateMap<ProductViewModel, Product>();
+            CreateMap<ReviewViewModel, Review>();
             CreateMap<SizeViewModel, Size>();
             CreateMap<SlideViewModel, Slide>();
             CreateMap<SystemConfigViewModel, SystemConfig>();

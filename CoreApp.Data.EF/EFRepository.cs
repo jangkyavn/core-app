@@ -71,6 +71,11 @@ namespace CoreApp.Data.EF
             return FindAll(includeProperties).FirstOrDefault(predicate);
         }
 
+        public async Task<T> FindSingleAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties)
+        {
+            return await FindAll(includeProperties).FirstOrDefaultAsync(predicate);
+        }
+
         public void Remove(T entity)
         {
             _context.Set<T>().Remove(entity);

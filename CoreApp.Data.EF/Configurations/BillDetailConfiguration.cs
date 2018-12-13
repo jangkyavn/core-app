@@ -10,7 +10,9 @@ namespace CoreApp.Data.EF.Configurations
         public override void Configure(EntityTypeBuilder<BillDetail> entity)
         {
             entity.ToTable("BillDetails");
-         
+
+            entity.Property(p => p.Price).IsRequired().HasColumnType("decimal(18,2)");
+
             entity.HasOne(p => p.Bill)
                 .WithMany(b => b.BillDetails)
                 .HasForeignKey(p => p.BillId);

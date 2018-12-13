@@ -40,12 +40,14 @@ namespace CoreApp.Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
+        public IActionResult Login(string returnUrl)
         {
             if (_signInManager.IsSignedIn(User))
             {
                 return RedirectToAction("Manager", "Account");
             }
+
+            ViewData["ReturnUrl"] = returnUrl;
 
             return View();
         }
@@ -202,7 +204,7 @@ namespace CoreApp.Web.Controllers
                 if (result.Succeeded)
                 {
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {

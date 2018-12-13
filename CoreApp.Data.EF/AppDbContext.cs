@@ -47,6 +47,7 @@ namespace CoreApp.Data.EF
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductQuantity> ProductQuantities { get; set; }
         public DbSet<ProductTag> ProductTags { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public DbSet<Size> Sizes { get; set; }
         public DbSet<Slide> Slides { get; set; }
         public DbSet<SystemConfig> SystemConfigs { get; set; }
@@ -99,6 +100,7 @@ namespace CoreApp.Data.EF
             builder.AddConfiguration(new ProductImageConfiguration());
             builder.AddConfiguration(new ProductQuantityConfiguration());
             builder.AddConfiguration(new ProductTagConfiguration());
+            builder.AddConfiguration(new ReviewConfiguration());
             builder.AddConfiguration(new SizeConfiguration());
             builder.AddConfiguration(new SlideConfiguration());
             builder.AddConfiguration(new SystemConfigConfiguration());

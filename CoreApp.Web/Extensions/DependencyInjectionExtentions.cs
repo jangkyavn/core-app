@@ -47,6 +47,7 @@ namespace CoreApp.Web.Extensions
             services.AddTransient<IProductQuantityRepository, ProductQuantityRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<IProductTagRepository, ProductTagRepository>();
+            services.AddTransient<IReviewRepository, ReviewRepository>();
             services.AddTransient<ISizeRepository, SizeRepository>();
             services.AddTransient<ISlideRepository, SlideRepository>();
             services.AddTransient<ISystemConfigRepository, SystemConfigRepository>();
@@ -64,6 +65,7 @@ namespace CoreApp.Web.Extensions
             services.AddTransient<IFunctionService, FunctionService>();
             services.AddTransient<IProductCategoryService, ProductCategoryService>();
             services.AddTransient<IProductService, ProductService>();
+            services.AddTransient<IReviewService, ReviewService>();
             services.AddTransient<IRoleService, RoleService>();
             services.AddTransient<ISizeService, SizeService>();
             services.AddTransient<ITagService, TagService>();

@@ -10,7 +10,6 @@ namespace CoreApp.Data.Entities
     {
         public string FullName { get; set; }
         public DateTime? BirthDay { get; set; }
-        public decimal Balance { get; set; }
         public string Avatar { get; set; }
         public bool Gender { get; set; }
         public string Address { get; set; }
@@ -20,5 +19,6 @@ namespace CoreApp.Data.Entities
 
         public virtual ICollection<Announcement> Announcements { get; set; }
         public virtual ICollection<Bill> Bills { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

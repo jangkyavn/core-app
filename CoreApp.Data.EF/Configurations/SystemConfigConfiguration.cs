@@ -13,6 +13,7 @@ namespace CoreApp.Data.EF.Configurations
 
             entity.Property(c => c.Id).IsRequired().IsUnicode(false).HasMaxLength(50);
             entity.Property(p => p.Name).IsRequired().HasMaxLength(250);
+            entity.Property(p => p.Value5).HasColumnType("decimal(18,2)");
         }
     }
 }

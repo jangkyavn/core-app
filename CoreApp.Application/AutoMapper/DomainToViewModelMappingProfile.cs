@@ -26,6 +26,7 @@ namespace CoreApp.Application.AutoMapper
             CreateMap<ProductQuantity, ProductQuantityViewModel>();
             CreateMap<ProductTag, ProductTagViewModel>();
             CreateMap<Product, ProductViewModel>().MaxDepth(1);
+            CreateMap<Review, ReviewViewModel>();
             CreateMap<Size, SizeViewModel>();
             CreateMap<Slide, SlideViewModel>();
             CreateMap<SystemConfig, SystemConfigViewModel>();

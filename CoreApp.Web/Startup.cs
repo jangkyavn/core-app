@@ -5,6 +5,7 @@ using CoreApp.Web.Extensions;
 using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -21,18 +22,21 @@ using Newtonsoft.Json.Serialization;
 using PaulMiami.AspNetCore.Mvc.Recaptcha;
 using System;
 using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace CoreApp.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
+            _env = env;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment _env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -68,6 +72,10 @@ namespace CoreApp.Web
                     });
 
             services.AddLocalization(opts => { opts.ResourcesPath = "Resources"; });
+
+            services.AddDataProtection()
+                .PersistKeysToFileSystem(new DirectoryInfo(@".\wwwroot\shared"))
+                .SetApplicationName("CoreApp.Web");
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                 builder =>
@@ -167,8 +175,8 @@ namespace CoreApp.Web
                 app.UseHsts();
             }
 
-            app.UseImageResizer();
             app.UseHttpsRedirection();
+            app.UseImageResizer();
             app.UseStaticFiles();
             app.UseCookiePolicy();
             app.UseSession();

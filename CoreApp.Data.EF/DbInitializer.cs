@@ -54,7 +54,6 @@ namespace CoreApp.Data.EF
                     UserName = "admin",
                     FullName = "Administrator",
                     Email = "admin@gmail.com",
-                    Balance = 0,
                     Gender = true,
                     DateCreated = DateTime.Now,
                     DateModified = DateTime.Now,

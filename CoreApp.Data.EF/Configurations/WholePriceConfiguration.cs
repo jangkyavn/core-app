@@ -11,6 +11,8 @@ namespace CoreApp.Data.EF.Configurations
         {
             entity.ToTable("WholePrices");
 
+            entity.Property(p => p.Price).IsRequired().HasColumnType("decimal(18,2)");
+
             entity.HasOne(p => p.Product)
                 .WithMany(b => b.WholePrices)
                 .HasForeignKey(p => p.ProductId);

@@ -16,6 +16,8 @@ namespace CoreApp.Web.Models.ProductViewModels
 
         public List<ProductImageViewModel> ProductImages { set; get; }
 
+        public List<ReviewViewModel> Reviews { get; set; }
+
         public List<TagViewModel> Tags { set; get; }
 
         public List<SelectListItem> Colors { set; get; }

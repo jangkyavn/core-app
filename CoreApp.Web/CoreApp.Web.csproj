@@ -72,9 +72,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logs\" />
     <Folder Include="Resources\Models\" />
     <Folder Include="wwwroot\export-files\" />
+    <Folder Include="wwwroot\shared\" />
   </ItemGroup>
 
   <ItemGroup>

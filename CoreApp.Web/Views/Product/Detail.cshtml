@@ -1,10 +1,33 @@
-﻿@model DetailViewModel
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<AppUser> SignInManager
+@inject UserManager<AppUser> UserManager
+
+@model DetailViewModel
 @{
     ViewData["Title"] = Model.Product.Name;
     ViewData["MetaKeyword"] = Model.Product.SeoKeywords;
     ViewData["MetaDescription"] = Model.Product.SeoDescription;
 
     var product = Model.Product;
+}
+
+@section Styles {
+    <style type="text/css">
+        td {
+            text-align: center;
+        }
+
+        .text-danger {
+            color: red !important;
+        }
+
+        .reviews-content-left {
+            height: 300px;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+    </style>
 }
 
 <div class="breadcrumbs">
@@ -166,131 +189,64 @@
                                     <div id="reviews" class="tab-pane fade">
                                         <div class="col-sm-5 col-lg-5 col-md-5">
                                             <div class="reviews-content-left">
-                                                <h2>Customer Reviews</h2>
-                                                <div class="review-ratting">
-                                                    <p><a href="#">Amazing</a> Review by Company</p>
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th>Price</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Value</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Quality</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <p class="author"> Angela Mack<small> (Posted on 16/12/2015)</small> </p>
-                                                </div>
-                                                <div class="review-ratting">
-                                                    <p><a href="#">Good!!!!!</a> Review by Company</p>
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th>Price</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Value</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Quality</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <p class="author"> Lifestyle<small> (Posted on 20/12/2015)</small> </p>
-                                                </div>
-                                                <div class="review-ratting">
-                                                    <p><a href="#">Excellent</a> Review by Company</p>
-                                                    <table>
-                                                        <tbody>
-                                                            <tr>
-                                                                <th>Price</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Value</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <th>Quality</th>
-                                                                <td><div class="rating"> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star-o"></i> <i class="fa fa-star-o"></i> </div></td>
-                                                            </tr>
-                                                        </tbody>
-                                                    </table>
-                                                    <p class="author"> Jone Deo<small> (Posted on 25/12/2015)</small> </p>
-                                                </div>
+                                                <h2>Đánh giá của khách hàng</h2>
+                                                <div id="reviewListContent"></div>
                                             </div>
                                         </div>
                                         <div class="col-sm-7 col-lg-7 col-md-7">
                                             <div class="reviews-content-right">
-                                                <h2>Write Your Own Review</h2>
-                                                <form>
-                                                    <h3>You're reviewing: <span>Donec Ac Tempus</span></h3>
-                                                    <h4>How do you rate this product?<em>*</em></h4>
-                                                    <div class="table-responsive reviews-table">
-                                                        <table>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th></th>
-                                                                    <th>1 star</th>
-                                                                    <th>2 stars</th>
-                                                                    <th>3 stars</th>
-                                                                    <th>4 stars</th>
-                                                                    <th>5 stars</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Quality</td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Price</td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>Value</td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                    <td><input type="radio"></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <div class="form-area">
-                                                        <div class="form-element">
-                                                            <label>Nickname <em>*</em></label>
-                                                            <input type="text">
+                                                <h2>
+                                                    Viết nhận xét của riêng bạn
+                                                </h2>
+                                                @if (SignInManager.IsSignedIn(User))
+                                                {
+                                                    <form id="reviewForm">
+                                                        @Html.AntiForgeryToken()
+
+                                                        <input type="hidden" id="hidReviewId" value="0" />
+                                                        <input type="hidden" id="hidProductId" value="@product.Id" />
+                                                        <input type="hidden" id="hidDateCreated" />
+
+                                                        <div class="reviews-table">
+                                                            <table>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th>1 sao</th>
+                                                                        <th>2 sao</th>
+                                                                        <th>3 sao</th>
+                                                                        <th>4 sao</th>
+                                                                        <th>5 sao</th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><input type="radio" name="rating" value="1"></td>
+                                                                        <td><input type="radio" name="rating" value="2"></td>
+                                                                        <td><input type="radio" name="rating" value="3"></td>
+                                                                        <td><input type="radio" name="rating" value="4"></td>
+                                                                        <td><input type="radio" name="rating" value="5"></td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <label id="errorRating"></label>
                                                         </div>
-                                                        <div class="form-element">
-                                                            <label>Summary of Your Review <em>*</em></label>
-                                                            <input type="text">
+                                                        <div class="form-area">
+                                                            <div class="form-element">
+                                                                <label>Nhận xét:</label>
+                                                                <textarea class="form-control" name="content" id="txtContent"></textarea>
+                                                            </div>
+                                                            <div class="buttons-set">
+                                                                <button class="button submit" title="Submit Review" type="button" id="btnReview">
+                                                                    <span><i class="fa fa-thumbs-up"></i> &nbsp;Đánh giá</span>
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <div class="form-element">
-                                                            <label>Review <em>*</em></label>
-                                                            <textarea></textarea>
-                                                        </div>
-                                                        <div class="buttons-set">
-                                                            <button class="button submit" title="Submit Review" type="submit"><span><i class="fa fa-thumbs-up"></i> &nbsp;Review</span></button>
-                                                        </div>
-                                                    </div>
-                                                </form>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <button type="button" class="button submit" title="Đăng nhập" onclick="window.location.href='/Account/Login?returnUrl=@Context.Request.Path'">
+                                                        <span><i class="fa fa-sign-in"></i> &nbsp;Đăng nhập</span>
+                                                    </button>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -418,11 +374,38 @@
 
 <partial name="~/Views/Shared/_ServicePartial.cshtml" />
 
+<script id="templateReviewListItem" type="x-tmpl-mustache">
+    <div class="review-ratting" style="border-bottom: 1px solid #e5e5e5">
+        <div class="row">
+            <div class="col-sm-9 lbl-fullname-{{Id}}">{{FullName}}</div>
+            <div class="dropdown col-sm-3 review-setting-{{Id}}" style="display: none;">
+                <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                    <i class="fa fa-cog"></i>
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="#" class="btn-edit-review">Sửa</a></li>
+                    <li><a href="#" class="btn-delete-review">Xóa</a></li>
+                </ul>
+            </div>
+        </div>
+        <div style="clear: both;"></div>
+        <p>
+            <div class="rating">{{{Rating}}}</div>
+        </p>
+        <p>
+            {{Content}}
+            &nbsp;<small>{{DateCreated}}</small>
+        </p>
+    </div>
+</script>
+
 @section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+
     <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5c07bc13ede2b97e"></script>
     <script src="~/client-side/js/jquery.flexslider.js"></script>
     <script src="~/client-side/js/cloud-zoom.js"></script>
-    <script src="~/client-side/app/controllers/product/detail.js"></script>
+    <script src="~/client-side/app/controllers/product/detail.js" asp-append-version="true"></script>
     <script type="text/javascript">
         var productDetail = new ProductDetail();
         productDetail.initialize();
