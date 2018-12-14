@@ -66,7 +66,7 @@ namespace CoreApp.Application.Implementation
 
                 foreach (var t in tags)
                 {
-                    var tagId = TextHelper.ConvertToUnSign(t);
+                    var tagId = TextHelper.ToUnsignString(t);
 
                     if (!_tagRepository.FindAll(x => x.Id == tagId).Any())
                     {
@@ -187,13 +187,7 @@ namespace CoreApp.Application.Implementation
 
             if (!string.IsNullOrEmpty(keyword))
             {
-                query = query.Where(delegate (Product p)
-                {
-                    if (TextHelper.ConvertToUnSign(p.Name).IndexOf(keyword, StringComparison.CurrentCultureIgnoreCase) >= 0)
-                        return true;
-                    else
-                        return false;
-                }).AsQueryable();
+                query = query.Where(x => TextHelper.ConvertToUnSign(x.Name.ToUpper()).Contains(TextHelper.ConvertToUnSign(keyword.ToUpper().Trim())));
             }
 
             if (categoryId.HasValue)
@@ -591,7 +585,7 @@ namespace CoreApp.Application.Implementation
             {
                 query = query.Where(delegate (Product p)
                 {
-                    if (TextHelper.ConvertToUnSign(p.Name).IndexOf(keyword.Trim(), StringComparison.CurrentCultureIgnoreCase) >= 0)
+                    if (TextHelper.ConvertToUnSign(p.Name.ToUpper()).IndexOf(keyword.ToUpper().Trim(), StringComparison.CurrentCultureIgnoreCase) >= 0)
                         return true;
                     else
                         return false;
@@ -612,7 +606,7 @@ namespace CoreApp.Application.Implementation
 
                 foreach (string t in tags)
                 {
-                    var tagId = TextHelper.ConvertToUnSign(t);
+                    var tagId = TextHelper.ToUnsignString(t);
 
                     if (!_tagRepository.FindAll(x => x.Id == tagId).Any())
                     {

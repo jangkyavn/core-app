@@ -66,10 +66,9 @@
                         <a href="#"><img src="~/client-side/images/sub1.jpg" alt="HTML template"></a>
                         <div class="hover_content">
                             <div class="hover_data">
-                                <div class="title"> Big Sale 1</div>
-                                <div class="desc-text">Up to 55% off</div>
-                                <span>Camera, Laptop & Mobile</span>
-                                <p><a href="#" class="shop-now">Get it now!</a></p>
+                                <div class="title"> Giảm giá lớn</div>
+                                <div class="desc-text">Giảm tới 55%</div>
+                                <p><a href="#" class="shop-now">Mua ngay!</a></p>
                             </div>
                         </div>
                     </div>
@@ -723,7 +722,12 @@
 </div>
 
 @section Scripts {
-    <script src="~/client-side/app/controllers/home/index.js" asp-append-version="true"></script>
+    <environment names="Development">
+        <script src="~/client-side/app/controllers/home/index.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/client-side/app/controllers/home/index.min.js"></script>
+    </environment>
     <script type='text/javascript'>
         var home = new HomeController();
         home.initialize();

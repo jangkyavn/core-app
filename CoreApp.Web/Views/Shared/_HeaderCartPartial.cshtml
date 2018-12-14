@@ -1,9 +1,13 @@
-﻿<div class="top-cart-contain" id="headerCart">
+﻿@inject IViewLocalizer Localizer
+
+<div class="top-cart-contain" id="headerCart">
     <div class="mini-cart">
         <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
             <a href="#">
-                <div class="cart-icon"><i class="icon-basket-loaded icons"></i><span class="cart-total" id="cartTotal">0</span></div>
-                <div class="shoppingcart-inner hidden-xs"><span class="cart-title">Giỏ hàng</span> </div>
+                <div class="cart-icon">
+                    <i class="icon-basket-loaded icons"></i><span class="cart-total" id="cartTotal">0</span>
+                </div>
+                <div class="shoppingcart-inner hidden-xs"><span class="cart-title">@Localizer["CART"]</span> </div>
             </a>
         </div>
         <div>

@@ -49,7 +49,7 @@ namespace CoreApp.Application.Implementation
 
                 foreach (var item in tags)
                 {
-                    var tagId = TextHelper.ConvertToUnSign(item);
+                    var tagId = TextHelper.ToUnsignString(item);
 
                     if (!_tagRepository.FindAll(x => x.Id == tagId).Any())
                     {

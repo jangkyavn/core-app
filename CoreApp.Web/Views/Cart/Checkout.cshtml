@@ -141,13 +141,19 @@
                                     }
                                     else
                                     {
-                                        <button class="button"><i class="icon-login"></i>&nbsp; <span>Login</span></button>
+                                        <button class="button" onclick="window.location.href='/Account/Login?returnUrl=@Context.Request.Path'">
+                                            <i class="icon-login"></i>&nbsp; <span>Đăng nhập</span>
+                                        </button>
+                                        <br />
                                     }
 
                                     <button type="button" class="button" onclick="window.location.href='/gio-hang.html'"><i class="fa fa-angle-double-left"></i>&nbsp;<span>Quay về giỏ hàng</span></button>
-                                    <button type="button" class="button btn-continue" data-step="1" id="btnStepOne">
-                                        <i class="fa fa-angle-double-right"></i>&nbsp; <span>Tiếp tục</span>
-                                    </button>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <button type="button" class="button btn-continue" data-step="1" id="btnStepOne">
+                                            <i class="fa fa-angle-double-right"></i>&nbsp; <span>Tiếp tục</span>
+                                        </button>
+                                    }
                                 </div>
                             </div>
                         </div>

@@ -23,5 +23,161 @@
     "inputFiles": [
       "wwwroot/admin-side/app/controllers/base/index.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/style.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/style.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/animate.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/animate.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/simple-line-icons.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/simple-line-icons.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/owl.carousel.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/owl.carousel.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/owl.transitions.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/owl.transitions.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/flexslider.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/flexslider.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/jquery-ui.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/jquery-ui.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/revolution-slider.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/revolution-slider.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/quick_view_popup.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/quick_view_popup.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/blog.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/blog.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/shortcode.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/shortcode.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/shortcodes/shortcodes.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/shortcodes/shortcodes.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/shortcodes/featured-box.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/shortcodes/featured-box.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/shortcodes/pricing-table.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/shortcodes/pricing-table.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/shortcodes/tooltip.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/shortcodes/tooltip.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/shortcodes/post.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/shortcodes/post.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/style.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/style.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/css/responsive.min.css",
+    "inputFiles": [
+      "wwwroot/client-side/css/responsive.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/js/mobile-menu.min.js",
+    "inputFiles": [
+      "wwwroot/client-side/js/mobile-menu.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/js/main.min.js",
+    "inputFiles": [
+      "wwwroot/client-side/js/main.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/js/countdown.min.js",
+    "inputFiles": [
+      "wwwroot/client-side/js/countdown.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/js/revolution-slider.min.js",
+    "inputFiles": [
+      "wwwroot/client-side/js/revolution-slider.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/lib/toastr/toastr.min.js",
+    "inputFiles": [
+      "wwwroot/lib/toastr/toastr.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/app/shared/core.min.js",
+    "inputFiles": [
+      "wwwroot/client-side/app/shared/core.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/app/controllers/base/index.min.js",
+    "inputFiles": [
+      "wwwroot/client-side/app/controllers/base/index.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/client-side/app/controllers/home/index.min.js",
+    "inputFiles": [
+      "wwwroot/client-side/app/controllers/home/index.js"
+    ]
   }
 ]
