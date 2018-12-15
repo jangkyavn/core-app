@@ -12,6 +12,10 @@ namespace CoreApp.Web.Models.ProductViewModels
 
         public bool Available { set; get; }
 
+        public int Rating { get; set; }
+
+        public int RatingTotal { get; set; }
+
         public List<ProductViewModel> RelatedProducts { get; set; }
 
         public List<ProductImageViewModel> ProductImages { set; get; }

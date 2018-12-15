@@ -1,4 +1,6 @@
-﻿@model ProductsByTagViewModel
+﻿@inject IReviewService ReviewService
+
+@model ProductsByTagViewModel
 @{
     ViewData["Title"] = "Kết quả theo thẻ " + Model.TagName;
     ViewData["MetaKeyword"] = Model.TagName;
@@ -132,11 +134,17 @@
                                                         </div>
                                                         <div class="item-content">
                                                             <div class="rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
+                                                                @for (int i = 1; i <= 5; i++)
+                                                                {
+                                                                    if (i <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                                                    {
+                                                                        <i class="fa fa-star"></i>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    }
+                                                                }
                                                             </div>
                                                             <div class="item-price">
                                                                 <div class="price-box">

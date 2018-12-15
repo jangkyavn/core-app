@@ -1,5 +1,8 @@
 ﻿@model HomeViewModel
+
 @inject IProductService ProductService
+@inject IReviewService ReviewService
+
 @{
     ViewData["Title"] = Model.Title;
     ViewData["MetaKeyword"] = Model.MetaKeyword;
@@ -124,7 +127,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="mt-button quick-view">
-                                                            <a href="quick_view.html">
+                                                            <a href="#" class="btn-quich-view" data-id="@item.Id">
                                                                 <i class="fa fa-search"></i>
                                                             </a>
                                                         </div>
@@ -138,11 +141,17 @@
                                                     </div>
                                                     <div class="item-content">
                                                         <div class="rating">
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
-                                                            <i class="fa fa-star-o"></i>
+                                                            @for (int i = 1; i <= 5; i++)
+                                                            {
+                                                                if (i <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                                                {
+                                                                    <i class="fa fa-star"></i>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <i class="fa fa-star-o"></i>
+                                                                }
+                                                            }
                                                         </div>
                                                         <div class="item-price">
                                                             @if (item.PromotionPrice.HasValue)
@@ -262,7 +271,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="mt-button quick-view">
-                                                                <a href="quick_view.html">
+                                                                <a href="#" class="btn-quich-view" data-id="@item.Id">
                                                                     <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
@@ -276,11 +285,17 @@
                                                         </div>
                                                         <div class="item-content">
                                                             <div class="rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
+                                                                @for (int y = 1; y <= 5; y++)
+                                                                {
+                                                                    if (y <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                                                    {
+                                                                        <i class="fa fa-star"></i>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    }
+                                                                }
                                                             </div>
                                                             <div class="item-price">
                                                                 <div class="price-box">
@@ -401,7 +416,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="mt-button quick-view">
-                                                                <a href="quick_view.html">
+                                                                <a href="#" class="btn-quich-view" data-id="@item.Id">
                                                                     <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
@@ -415,11 +430,17 @@
                                                         </div>
                                                         <div class="item-content">
                                                             <div class="rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
+                                                                @for (int y = 1; y <= 5; y++)
+                                                                {
+                                                                    if (y <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                                                    {
+                                                                        <i class="fa fa-star"></i>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    }
+                                                                }
                                                             </div>
                                                             <div class="item-price">
                                                                 <div class="price-box">
@@ -540,7 +561,7 @@
                                                                 </a>
                                                             </div>
                                                             <div class="mt-button quick-view">
-                                                                <a href="quick_view.html">
+                                                                <a href="#" class="btn-quich-view" data-id="@item.Id">
                                                                     <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
@@ -554,11 +575,17 @@
                                                         </div>
                                                         <div class="item-content">
                                                             <div class="rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
+                                                                @for (int y = 1; y <= 5; y++)
+                                                                {
+                                                                    if (y <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                                                    {
+                                                                        <i class="fa fa-star"></i>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    }
+                                                                }
                                                             </div>
                                                             <div class="item-price">
                                                                 <div class="price-box">
@@ -721,7 +748,11 @@
     </div>
 </div>
 
+<partial name="_QuickViewModalPartial" />
+
 @section Scripts {
+    
+
     <environment names="Development">
         <script src="~/client-side/app/controllers/home/index.js" asp-append-version="true"></script>
     </environment>

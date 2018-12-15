@@ -72,6 +72,23 @@ namespace CoreApp.Application.Implementation
             return _mapper.Map<Review, ReviewViewModel>(model);
         }
 
+        public async Task<int> GetRatingAverageAsync(int productId)
+        {
+            var query = _reviewRepository.FindAll(x => x.ProductId == productId);
+
+            if (query.Count() > 0)
+            {
+                return (int)Math.Round(await query.AverageAsync(x => x.Rating));
+            }
+
+            return 0;
+        }
+
+        public async Task<int> GetRatingTotalAsync(int productId)
+        {
+            return await _reviewRepository.FindAll(x => x.ProductId == productId).CountAsync();
+        }
+
         public void Save()
         {
             _unitOfWork.Commit();

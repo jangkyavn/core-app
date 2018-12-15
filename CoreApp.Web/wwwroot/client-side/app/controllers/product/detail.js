@@ -127,8 +127,6 @@ var ProductDetail = function () {
 
     var checkUniqueReview = function (productId) {
         core.callAjax('/Review/CheckExistReview', 'GET', { productId }, 'json', function (res) {
-            console.log(res);
-            console.log(res);
             if (res.Status) {
                 var data = res.Data;
                 $('#hidReviewId').val(data.Id);

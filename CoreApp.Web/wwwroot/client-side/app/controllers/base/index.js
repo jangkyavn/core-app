@@ -110,6 +110,67 @@ var BaseController = {
             $('#cartContent').html(render);
             $('#cartTotal').text(res.length);
         });
+    },
+    loadQuickViewData: function (id) {
+        core.callAjax('/Product/GetQuickViewData', 'GET', { id }, 'json', function (res) {
+            var data = res.Data;
+
+            var renderLabel = '';
+            if (data.HotFlag === true && data.HotFlag !== null) {
+                renderLabel += '<div class="icon-sale-label sale-left">Hot</div>';
+            }
+            if (core.getDiffDay(data.DateCreated) <= 7) {
+                renderLabel += '<div class="icon-new-label new-right">Mới</div>';
+            }
+            $('#lblQuickViewLabel').html(renderLabel);
+
+            $('.cloud-zoom').attr('href', `/uploaded/images/products/${data.Image}`);
+            $('#imgQuickViewImage').attr('src', `/uploaded/images/products/${data.Image}?w=321&h=321`);
+
+            $('#lblQuickViewName').text(data.Name);
+            if (data.PromotionPrice !== null && data.PromotionPrice !== '') {
+                $('#lblQuickViewPrice').html(`
+                    <p class="special-price">
+                        <span class="price"> ${core.formatNumber(data.PromotionPrice, 0)} </span>
+                    </p>
+                    <p class="old-price">
+                        <span class="price"> ${core.formatNumber(data.Price, 0)} </span>
+                    </p>
+                `);
+            } else {
+                $('#lblQuickViewPrice').html(`
+                    <span class="regular-price">
+                        <span class="price">${core.formatNumber(data.Price, 0)}</span>
+                    </span>
+                `);
+            }
+
+            var renderRating = '';
+            for (var i = 1; i <= 5; i++) {
+                if (i <= res.Rating) {
+                    renderRating += '<i class="fa fa-star"></i>';
+                } else {
+                    renderRating += '<i class="fa fa-star-o"></i>';
+                }
+            }
+            $('#lblQuickViewRating').html(renderRating);
+            $('#lblQuickViewStatus').text(data.Status === 1 ? 'Còn hàng' : 'Hết hàng');
+            $('#lblQuickViewDescription').text(data.Description);
+
+            var renderColors = '<select class="form-control" id="ddlQuickViewColors">';
+            $.each(res.Colors, function (i, item) {
+                renderColors += `<option value='${item.Id}'>${item.Name}</option>`;
+            });
+            renderColors += '</select>'
+            $('#lblQuickViewColors').html(renderColors);
+
+            var renderSizes = '<select class="form-control" id="ddlQuickViewSizes">';
+            $.each(res.Sizes, function (i, item) {
+                renderSizes += `<option value='${item.Id}'>${item.Name}</option>`;
+            });
+            renderSizes += '</select>'
+            $('#lblQuickViewSizes').html(renderSizes);
+        });
     }
 };
 

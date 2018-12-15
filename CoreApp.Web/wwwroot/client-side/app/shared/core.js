@@ -22,7 +22,7 @@ var core = {
             toastr.info(message);
         }
     },
-    confirm: function(message, callBack) {
+    confirm: function (message, callBack) {
         swal({
             title: "Thông báo",
             text: message,
@@ -46,6 +46,16 @@ var core = {
 
             swal.close();
         });
+    },
+    getDiffDay: function (datetime) {
+        if (datetime === null || datetime === '')
+            return '';
+
+        var now = moment(new Date());
+        var pubDate = moment(datetime);
+        var duration = moment.duration(now.diff(pubDate));
+        var day = parseInt(duration.asDays());
+        return day;
     },
     dateFormatJson: function(datetime) {
         if (datetime === null || datetime === '')

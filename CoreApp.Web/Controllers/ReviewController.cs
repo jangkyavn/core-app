@@ -1,6 +1,8 @@
 ﻿using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
+using CoreApp.Data.Entities;
 using CoreApp.Web.Extensions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections.Generic;
@@ -12,10 +14,13 @@ namespace CoreApp.Web.Controllers
     public class ReviewController : Controller
     {
         private readonly IReviewService _reviewService;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public ReviewController(IReviewService reviewService)
+        public ReviewController(IReviewService reviewService,
+            SignInManager<AppUser> signInManager)
         {
             _reviewService = reviewService;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
@@ -42,6 +47,14 @@ namespace CoreApp.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> CheckExistReview(int productId)
         {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return new OkObjectResult(new
+                {
+                    Status = false
+                });
+            }
+
             var result = _reviewService.CheckExistReview(productId, User.GetUserId());
             var viewModel = await _reviewService.GetByIdAsync(productId, User.GetUserId());
 

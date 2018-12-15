@@ -1,4 +1,6 @@
-﻿@model CatalogViewModel
+﻿@inject IReviewService ReviewService
+
+@model CatalogViewModel
 @{
     ViewData["Title"] = Model.Data.CurrentPage == 1 ? Model.Category.Name : $"{Model.Category.Name} - Trang {Model.Data.CurrentPage}";
     ViewData["MetaKeyword"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoKeywords : "{Model.Category.SeoKeywords} - Trang ${Model.Data.CurrentPage}";
@@ -134,11 +136,17 @@
                                                         </div>
                                                         <div class="item-content">
                                                             <div class="rating">
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
+                                                                @for (int i = 1; i <= 5; i++)
+                                                                {
+                                                                    if (i <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                                                    {
+                                                                        <i class="fa fa-star"></i>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    }
+                                                                }
                                                             </div>
                                                             <div class="item-price">
                                                                 <div class="price-box">

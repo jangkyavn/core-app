@@ -15,6 +15,8 @@ namespace CoreApp.Application.Interfaces
         Task<ReviewViewModel> GetByIdAsync(int id);
         Task<ReviewViewModel> GetByIdAsync(int productId, Guid userId);
         bool CheckExistReview(int productId, Guid userId);
+        Task<int> GetRatingAverageAsync(int productId);
+        Task<int> GetRatingTotalAsync(int productId);
         void Save();
     }
 }

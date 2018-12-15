@@ -1,0 +1,76 @@
+﻿<div class="modal fade" id="quickViewModal" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Xem nhanh</h4>
+            </div>
+            <div class="modal-body" id="quick_view_popup-content">
+                <div style="width:auto;height:auto;overflow: auto;position:relative;">
+                    <div class="product-view-area">
+                        <div class="product-big-image col-xs-12 col-sm-5 col-lg-5 col-md-5">
+                            <div id="lblQuickViewLabel"></div>
+                            <div class="large-image">
+                                <a href="images/products/product-1.jpg" class="cloud-zoom" id="zoom1" rel="useWrapper: false, adjustY:0, adjustX:20">
+                                    <img class="zoom-img" src="images/products/product-1.jpg" id="imgQuickViewImage">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-7 col-lg-7 col-md-7">
+                            <div class="product-details-area">
+                                <div class="product-name">
+                                    <h1 id="lblQuickViewName"></h1>
+                                </div>
+                                <div class="price-box" id="lblQuickViewPrice"></div>
+                                <div class="ratings">
+                                    <div class="rating" id="lblQuickViewRating"></div>
+                                    <p class="availability in-stock pull-right">Tình trạng: <span id="lblQuickViewStatus"></span></p>
+                                </div>
+                                <div class="short-description">
+                                    <h2>Mô tả</h2>
+                                    <p id="lblQuickViewDescription"></p>
+                                </div>
+                                <div class="product-color-size-area">
+                                    <div class="color-area">
+                                        <h2 class="saider-bar-title">Màu sắc</h2>
+                                        <div class="color" id="lblQuickViewColors"></div>
+                                    </div>
+                                    <div class="size-area">
+                                        <h2 class="saider-bar-title">Kích cỡ</h2>
+                                        <div class="size" id="lblQuickViewSizes"></div>
+                                    </div>
+                                </div>
+                                <div class="product-variation">
+                                    <form action="#" method="post">
+                                        <div class="cart-plus-minus">
+                                            <label for="qty">Số lượng:</label>
+                                            <div class="numbers-row">
+                                                <div onClick="var result = document.getElementById('txtQuickViewQuantity'); var qty = result.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 0 ) result.value--;return false;" class="dec qtybutton"><i class="fa fa-minus">&nbsp;</i></div>
+                                                <input type="text" class="qty" title="Qty" value="1" maxlength="12" id="txtQuickViewQuantity" name="qty">
+                                                <div onClick="var result = document.getElementById('txtQuickViewQuantity'); var qty = result.value; if( !isNaN( qty )) result.value++;return false;" class="inc qtybutton"><i class="fa fa-plus">&nbsp;</i></div>
+                                            </div>
+                                        </div>
+                                        <button class="button pro-add-to-cart" title="Thêm vào giỏ" type="button" id="btnQuickViewAddToCart">
+                                            <span>
+                                                <i class="fa fa-shopping-basket"></i> Thêm vào giỏ
+                                            </span>
+                                        </button>
+                                    </form>
+                                </div>
+                                <div class="product-cart-option">
+                                    <ul>
+                                        <li><a href="#"><i class="fa fa-heart"></i><span>Yêu thích</span></a></li>
+                                        <li><a href="#"><i class="fa fa-retweet"></i><span>So sánh</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--product-view-->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

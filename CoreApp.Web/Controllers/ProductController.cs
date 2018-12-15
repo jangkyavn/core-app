@@ -99,6 +99,8 @@ namespace CoreApp.Web.Controllers
             model.Reviews = await _reviewService.GetAllAsync();
             model.Tags = _productService.GetProductTags(id);
             model.Breadcrumbs = _productService.GetBreadcrumbs(id);
+            model.Rating = await _reviewService.GetRatingAverageAsync(id);
+            model.RatingTotal = await _reviewService.GetRatingTotalAsync(id);
 
             var colors = await _colorService.GetAllAsync();
             var sizes = await _sizeService.GetAllAsync();
@@ -119,6 +121,28 @@ namespace CoreApp.Web.Controllers
         }
 
         #region Ajax API
+        [HttpGet]
+        public async Task<IActionResult> GetQuickViewData(int? id)
+        {
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+
+            var viewModel = _productService.GetById(id.Value);
+            var rating = await _reviewService.GetRatingAverageAsync(id.Value);
+            var colors = await _colorService.GetAllAsync();
+            var sizes = await _sizeService.GetAllAsync();
+
+            return new OkObjectResult(new
+            {
+                Data = viewModel,
+                Rating = rating,
+                Colors = colors,
+                Sizes = sizes
+            });
+        }
+
         [HttpGet]
         public IActionResult SuggestSearchResult(string keyword)
         {

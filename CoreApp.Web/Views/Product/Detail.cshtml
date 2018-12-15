@@ -2,6 +2,7 @@
 
 @inject SignInManager<AppUser> SignInManager
 @inject UserManager<AppUser> UserManager
+@inject IReviewService ReviewService
 
 @model DetailViewModel
 @{
@@ -104,13 +105,19 @@
                         </div>
                         <div class="ratings">
                             <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star-o"></i>
-                                <i class="fa fa-star-o"></i>
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= Model.Rating)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-star-o"></i>
+                                    }
+                                }
                             </div>
-                            <p class="rating-links"> <a href="#">1 Đánh giá(s)</a>
+                            <p class="rating-links"> <a href="#">@Model.RatingTotal Đánh giá</a>
                             <p class="availability @(product.Status==CoreApp.Data.Enums.Status.Active?"in-stock":"out-of-stock") pull-right">
                                 Tình trạng: <span>@(product.Status == CoreApp.Data.Enums.Status.Active ? "Còn hàng" : "Hết hàng")</span>
                             </p>
@@ -198,13 +205,13 @@
                                                 <h2>
                                                     Viết nhận xét của riêng bạn
                                                 </h2>
+                                                <input type="hidden" id="hidProductId" value="@product.Id" />
                                                 @if (SignInManager.IsSignedIn(User))
                                                 {
                                                     <form id="reviewForm">
                                                         @Html.AntiForgeryToken()
 
                                                         <input type="hidden" id="hidReviewId" value="0" />
-                                                        <input type="hidden" id="hidProductId" value="@product.Id" />
                                                         <input type="hidden" id="hidDateCreated" />
 
                                                         <div class="reviews-table">
@@ -325,11 +332,17 @@
                                                         </div>
                                                         <div class="item-content">
                                                             <div class="rating">
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
-                                                                <i class="fa fa-star-o"></i>
+                                                                @for (int i = 1; i <= 5; i++)
+                                                                {
+                                                                    if (i <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                                                    {
+                                                                        <i class="fa fa-star"></i>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <i class="fa fa-star-o"></i>
+                                                                    }
+                                                                }
                                                             </div>
                                                             <div class="item-price">
                                                                 <div class="price-box">
