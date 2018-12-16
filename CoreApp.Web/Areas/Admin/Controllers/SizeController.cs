@@ -4,10 +4,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
+using CoreApp.Data.Enums;
+using CoreApp.Utilities.Constants;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 
 namespace CoreApp.Web.Areas.Admin.Controllers
@@ -16,12 +21,18 @@ namespace CoreApp.Web.Areas.Admin.Controllers
     {
         private readonly ISizeService _sizeService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAnnouncementService _announcementService;
+        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
 
         public SizeController(ISizeService sizeService,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IAnnouncementService announcementService,
+            IHubContext<CoreHub, ICoreHub> hubContext)
         {
             _sizeService = sizeService;
             _authorizationService = authorizationService;
+            _announcementService = announcementService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -90,6 +101,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 if (result.Succeeded == false)
                     return StatusCode(401);
 
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Thêm mới kích cỡ {sizeViewModel.Name}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Thêm mới",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
                 _sizeService.Add(sizeViewModel);
             }
             else
@@ -97,6 +121,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 var result = await _authorizationService.AuthorizeAsync(User, "SIZE", Operations.Update);
                 if (result.Succeeded == false)
                     return StatusCode(401);
+
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Cập nhật kích cỡ {sizeViewModel.Name}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Cập nhật",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
                 _sizeService.Update(sizeViewModel);
                 isAddNew = false;
@@ -118,6 +155,25 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 return new BadRequestResult();
             }
 
+            var viewModel = await _sizeService.GetById(id.Value);
+            if (viewModel == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Xóa kích cỡ {viewModel.Name}",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Xóa",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
             _sizeService.Delete(id.Value);
             _sizeService.Save();
 
@@ -137,6 +193,20 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             }
 
             var ids = JsonConvert.DeserializeObject<List<int>>(jsonId);
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Xóa {ids.Count} kích cỡ",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Xóa nhiều",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
             _sizeService.DeleteMultiple(ids);
             _sizeService.Save();
 

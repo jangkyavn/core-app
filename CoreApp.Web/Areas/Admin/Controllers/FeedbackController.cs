@@ -1,14 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using CoreApp.Application.Interfaces;
+﻿using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
+using CoreApp.Data.Enums;
+using CoreApp.Utilities.Constants;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoreApp.Web.Areas.Admin.Controllers
 {
@@ -16,12 +21,18 @@ namespace CoreApp.Web.Areas.Admin.Controllers
     {
         private readonly IFeedbackService _feedbackService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAnnouncementService _announcementService;
+        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
 
         public FeedbackController(IFeedbackService feedbackService,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IAnnouncementService announcementService,
+            IHubContext<CoreHub, ICoreHub> hubContext)
         {
             _feedbackService = feedbackService;
             _authorizationService = authorizationService;
+            _announcementService = announcementService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -91,6 +102,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 if (result.Succeeded == false)
                     return StatusCode(401);
 
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Thêm mới phản hồi có email {feedbackViewModel.Email}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Thêm mới",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
                 _feedbackService.Add(feedbackViewModel);
             }
             else
@@ -98,6 +122,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 var result = await _authorizationService.AuthorizeAsync(User, "FEEDBACK", Operations.Update);
                 if (result.Succeeded == false)
                     return StatusCode(401);
+
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Cập nhật phản hồi có email {feedbackViewModel.Email}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Cập nhật",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
                 _feedbackService.Update(feedbackViewModel);
                 isAddView = false;
@@ -114,6 +151,30 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             if (result.Succeeded == false)
                 return StatusCode(401);
 
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+
+            var viewModel = await _feedbackService.GetByIdAsync(id.Value);
+            if (viewModel == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Xóa phản hồi có email {viewModel.Email}",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Xóa",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
             await _feedbackService.DeleteAsync(id.Value);
             _feedbackService.SaveChanges();
 
@@ -128,6 +189,20 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 return StatusCode(401);
 
             var ids = JsonConvert.DeserializeObject<List<int>>(jsonId);
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Xóa phản {ids.Count} phản hồi",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Xóa nhiều",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
             await _feedbackService.DeleteMultipleAsync(ids);
             _feedbackService.SaveChanges();
 

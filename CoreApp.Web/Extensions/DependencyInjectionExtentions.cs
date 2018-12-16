@@ -77,7 +77,7 @@ namespace CoreApp.Web.Extensions
             services.AddTransient<IEmailSender, EmailSender>();
             services.AddTransient<IViewRenderService, ViewRenderService>();
 
-            services.AddTransient<DbInitializer>();
+            //services.AddTransient<DbInitializer>();
         }
     }
 }

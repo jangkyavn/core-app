@@ -43,11 +43,6 @@ var footerController = function () {
                 show: true,
                 backdrop: 'static'
             });
-
-            setTimeout(function () {
-                document.getElementById('frame').contentWindow.location.reload();
-                $('#div_iframe').scrollTop(2900);
-            }, 200);
         });
 
         $('body').on('click', '.btn-edit', function (e) {

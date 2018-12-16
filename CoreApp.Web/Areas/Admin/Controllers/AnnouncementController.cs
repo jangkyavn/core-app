@@ -49,7 +49,13 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 return StatusCode(401);
 
             var data = await _announcementService.GetAllPagingAsync(keyword, User.GetUserId(), page, pageSize);
-            return new OkObjectResult(data);
+            var unreadTotal = await _announcementService.GetUnreadTotalAsync(User.GetUserId());
+
+            return new OkObjectResult(new
+            {
+                Data = data,
+                UnreadTotal = unreadTotal
+            });
         }
 
         [HttpPost]

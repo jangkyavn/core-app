@@ -27,7 +27,7 @@ var productController = function () {
         });
 
         $('#txtName').on('keyup', function (e) {
-            $('#txtSeoAlias').val(core.configs.domain + core.makeSeoAlias($(this).val()));
+            $('#txtSeoAlias').val(window.location.host + '/' + core.makeSeoAlias($(this).val()));
         });
 
         $('#fImage').on('change', function () {
@@ -306,7 +306,7 @@ var productController = function () {
             $('#chkStatus').prop('checked', res.Status);
             $('#chkHotFlag').prop('checked', res.HotFlag);
             $('#txtSeoPageTitle').val(res.SeoPageTitle);
-            $('#txtSeoAlias').val(core.configs.domain + res.SeoAlias);
+            $('#txtSeoAlias').val(window.location.host + '/' + res.SeoAlias);
             $('#txtSeoKeywords').val(res.SeoKeywords);
             $('#txtSeoDescription').val(res.SeoDescription);
 
@@ -417,7 +417,7 @@ var productController = function () {
         $('#chkHotFlag').prop('checked', false);
 
         $('#txtSeoPageTitle').val('');
-        $('#txtSeoAlias').val(core.configs.domain);
+        $('#txtSeoAlias').val(window.location.host);
         $('#txtSeoKeywords').val('');
         $('#txtSeoDescription').val('');
 

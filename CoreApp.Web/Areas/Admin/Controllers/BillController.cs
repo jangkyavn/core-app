@@ -1,14 +1,18 @@
 ﻿using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
 using CoreApp.Data.Enums;
+using CoreApp.Utilities.Constants;
 using CoreApp.Utilities.Extensions;
 using CoreApp.Utilities.Helpers;
 using CoreApp.Web.Areas.Admin.Models;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -23,14 +27,20 @@ namespace CoreApp.Web.Areas.Admin.Controllers
         private readonly IBillService _billService;
         private readonly IHostingEnvironment _hostingEnvironment;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAnnouncementService _announcementService;
+        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
 
         public BillController(IBillService billService,
             IHostingEnvironment hostingEnvironment,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IAnnouncementService announcementService,
+            IHubContext<CoreHub, ICoreHub> hubContext)
         {
             _billService = billService;
             _hostingEnvironment = hostingEnvironment;
             _authorizationService = authorizationService;
+            _announcementService = announcementService;
+            _hubContext = hubContext;
         }
 
         public async Task<IActionResult> Index()
@@ -44,13 +54,23 @@ namespace CoreApp.Web.Areas.Admin.Controllers
 
         #region Ajax API
         [HttpGet]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<IActionResult> GetById(int? id)
         {
             var result = await _authorizationService.AuthorizeAsync(User, "BILL", Operations.Read);
             if (result.Succeeded == false)
                 return StatusCode(401);
 
-            var model = _billService.GetDetail(id);
+            if (id == null)
+            {
+                return new BadRequestResult();
+            }
+
+            var model = _billService.GetDetail(id.Value);
+            if (model == null)
+            {
+                return new NotFoundResult();
+            }
+
             return new OkObjectResult(model);
         }
 
@@ -114,6 +134,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 if (result.Succeeded == false)
                     return StatusCode(401);
 
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Thêm mới hóa đơn của người dùng {billVm.CustomerName}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Thêm mới",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
                 _billService.Create(billVm);
             }
             else
@@ -121,6 +154,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 var result = await _authorizationService.AuthorizeAsync(User, "BILL", Operations.Update);
                 if (result.Succeeded == false)
                     return StatusCode(401);
+
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Cập nhật hóa đơn của người dùng {billVm.CustomerName}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Cập nhật",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
                 _billService.Update(billVm);
                 isAddNew = false;

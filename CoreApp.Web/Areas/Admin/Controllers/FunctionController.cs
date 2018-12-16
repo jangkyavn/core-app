@@ -1,12 +1,17 @@
 ﻿using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
+using CoreApp.Data.Enums;
 using CoreApp.Infrastructure.Enums;
+using CoreApp.Utilities.Constants;
 using CoreApp.Utilities.Extensions;
 using CoreApp.Web.Areas.Admin.Models;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +23,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
     {
         private readonly IFunctionService _functionService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAnnouncementService _announcementService;
+        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
 
         public FunctionController(
             IFunctionService functionService,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IAnnouncementService announcementService,
+            IHubContext<CoreHub, ICoreHub> hubContext)
         {
             _functionService = functionService;
             _authorizationService = authorizationService;
+            _announcementService = announcementService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -114,6 +125,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 if (result.Succeeded == false)
                     return StatusCode(401);
 
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Thêm mới chức năng có tên {viewModel.Name}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Thêm mới",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
                 _functionService.Add(viewModel);
             }
             else
@@ -121,6 +145,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 var result = await _authorizationService.AuthorizeAsync(User, "FUNCTION", Operations.Update);
                 if (result.Succeeded == false)
                     return StatusCode(401);
+
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Cập nhật chức năng có tên {viewModel.Name}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Cập nhật",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
                 _functionService.Update(viewModel);
             }
@@ -136,6 +173,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             var result = await _authorizationService.AuthorizeAsync(User, "FUNCTION", Operations.Update);
             if (result.Succeeded == false)
                 return StatusCode(401);
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Cập nhật vị trí chức năng",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Cập nhật",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
             await _functionService.UpdateTreeNodePosition(jsonModel);
             _functionService.Save();
@@ -154,6 +204,25 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             {
                 return new BadRequestResult();
             }
+
+            var viewModel = _functionService.GetById(id);
+            if (viewModel == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Xóa chức năng có tên {viewModel.Name}",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Xóa",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
             _functionService.Delete(id);
             _functionService.Save();

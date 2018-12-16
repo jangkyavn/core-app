@@ -9,7 +9,7 @@
             </div>
             <div class="modal-body">
                 <div id='div_iframe'>
-                    <iframe id='frame' src="https://localhost:44328/"></iframe>
+                    <iframe id='frame' src="@(Context.Request.Scheme)://@(Context.Request.Host)"></iframe>
                 </div>
             </div>
             <div class="modal-footer">

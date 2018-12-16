@@ -18,8 +18,8 @@ var productCategoryController = function() {
             });
         });
 
-        $('#txtName').on('keyup', function(e) {
-            $('#txtSeoAlias').val(core.configs.domain + core.makeSeoAlias($(this).val()));
+        $('#txtName').on('keyup', function (e) {
+            $('#txtSeoAlias').val(window.location.host + '/' + core.makeSeoAlias($(this).val()));
         });
 
         $('#fImage').on('change', function() {
@@ -138,7 +138,7 @@ var productCategoryController = function() {
             $('#chkStatus').prop('checked', res.Status);
 
             $('#txtSeoPageTitle').val(res.SeoPageTitle);
-            $('#txtSeoAlias').val(core.configs.domain + res.SeoAlias);
+            $('#txtSeoAlias').val(window.location.host + '/' + res.SeoAlias);
             $('#txtSeoKeywords').val(res.SeoKeywords);
             $('#txtSeoDescription').val(res.SeoDescription);
         });
@@ -214,7 +214,7 @@ var productCategoryController = function() {
         $('#chkStatus').prop('checked', false);
 
         $('#txtSeoPageTitle').val('');
-        $('#txtSeoAlias').val(core.configs.domain);
+        $('#txtSeoAlias').val(window.location.host);
         $('#txtSeoKeywords').val('');
         $('#txtSeoDescription').val('');
 

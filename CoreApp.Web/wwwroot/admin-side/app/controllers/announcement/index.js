@@ -70,12 +70,13 @@ var AnnouncementController = function () {
             page: core.configs.pageIndex,
             pageSize: core.configs.pageSize
         }, 'json', function (res) {
+            var data = res.Data;
             var render = "";
             var template = $('#tbodyTemplate').html();
-            var numberOrder = res.FirstRowOnPage;
+            var numberOrder = data.FirstRowOnPage;
 
-            if (res.RowCount > 0) {
-                $.each(res.Results, function (i, item) {
+            if (data.RowCount > 0) {
+                $.each(data.Results, function (i, item) {
                     render += Mustache.render(template, {
                         NumberOrder: numberOrder++,
                         Id: item.Id,
@@ -89,14 +90,14 @@ var AnnouncementController = function () {
 
                 $('#tbodyContent').html(render);
 
-                $('#lblTotalRecords').text(res.RowCount);
-                $('#lblFirstRow').text(res.FirstRowOnPage);
-                $('#lblLastRow').text(res.LastRowOnPage);
+                $('#lblTotalRecords').text(data.RowCount);
+                $('#lblFirstRow').text(data.FirstRowOnPage);
+                $('#lblLastRow').text(data.LastRowOnPage);
 
-                if (core.configs.pageSize < res.RowCount) {
+                if (core.configs.pageSize < data.RowCount) {
                     $('#paginationUL').show();
 
-                    wrapPaging(res.RowCount, function () {
+                    wrapPaging(data.RowCount, function () {
                         loadData();
                     }, isPageChanged);
                 } else {

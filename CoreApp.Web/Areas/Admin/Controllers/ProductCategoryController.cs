@@ -1,9 +1,15 @@
 ﻿using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
+using CoreApp.Data.Enums;
+using CoreApp.Utilities.Constants;
 using CoreApp.Web.Authorization;
+using CoreApp.Web.Extensions;
+using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,12 +20,18 @@ namespace CoreApp.Web.Areas.Admin.Controllers
     {
         private readonly IProductCategoryService _productCategoryService;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAnnouncementService _announcementService;
+        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
 
         public ProductCategoryController(IProductCategoryService productCategoryService,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IAnnouncementService announcementService,
+            IHubContext<CoreHub, ICoreHub> hubContext)
         {
             _productCategoryService = productCategoryService;
             _authorizationService = authorizationService;
+            _announcementService = announcementService;
+            _hubContext = hubContext;
         }
 
         [HttpGet]
@@ -101,6 +113,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                     if (result.Succeeded == false)
                         return StatusCode(401);
 
+                    var announcementViewModel = new AnnouncementViewModel()
+                    {
+                        Content = $"Thêm mới danh mục sản phẩm có tên {viewModel.Name}",
+                        DateCreated = DateTime.Now,
+                        Status = Status.Active,
+                        Title = "Thêm mới",
+                        UserId = User.GetUserId(),
+                        FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                        Id = Guid.NewGuid().ToString()
+                    };
+                    await _announcementService.AddAsync(announcementViewModel);
+                    await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
                     _productCategoryService.Add(viewModel);
                 }
                 else
@@ -108,6 +133,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                     var result = await _authorizationService.AuthorizeAsync(User, "PRODUCT_CATEGORY", Operations.Update);
                     if (result.Succeeded == false)
                         return StatusCode(401);
+
+                    var announcementViewModel = new AnnouncementViewModel()
+                    {
+                        Content = $"Cập nhật danh mục sản phẩm có tên {viewModel.Name}",
+                        DateCreated = DateTime.Now,
+                        Status = Status.Active,
+                        Title = "Cập nhật",
+                        UserId = User.GetUserId(),
+                        FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                        Id = Guid.NewGuid().ToString()
+                    };
+                    await _announcementService.AddAsync(announcementViewModel);
+                    await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
                     _productCategoryService.Update(viewModel);
                     isAddNew = false;
@@ -126,6 +164,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             if (result.Succeeded == false)
                 return StatusCode(401);
 
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Cập nhật vị chí danh mục sản phẩm",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Cập nhật",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
             await _productCategoryService.UpdateTreeNodePosition(jsonModel);
             _productCategoryService.Save();
 
@@ -143,6 +194,25 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             {
                 return new BadRequestResult();
             }
+
+            var viewModel = _productCategoryService.GetById(id.Value);
+            if (viewModel == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Xóa danh mục sản phẩm có tên {viewModel.Name}",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Xóa",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
             _productCategoryService.Delete(id.Value);
             _productCategoryService.Save();

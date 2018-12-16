@@ -49,11 +49,12 @@ var BaseController = {
             page: core.configs.pageIndex,
             pageSize: core.configs.pageSize
         }, 'json', function (res) {
+            var data = res.Data;
             var render = "";
             var template = $('#announcementTemplate').html();
 
-            if (res.RowCount > 0) {
-                $.each(res.Results, function (i, item) {
+            if (data.RowCount > 0) {
+                $.each(data.Results, function (i, item) {
                     render += Mustache.render(template, {
                         Id: item.Id,
                         Title: item.Title,
@@ -66,12 +67,8 @@ var BaseController = {
                     });
                 });
 
-                var arrUnread = res.Results.map(function (i, item) {
-                    return item.HasRead === false;
-                });
-
                 $('#lblAnnouncementTotal').show();
-                $('#lblAnnouncementTotal').text(arrUnread.length);
+                $('#lblAnnouncementTotal').text(res.UnreadTotal);
                 $('#announcementContent').append(render);
                 $('#announcementFooter').show();
             } else {

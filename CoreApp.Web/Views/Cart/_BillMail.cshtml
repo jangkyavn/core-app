@@ -36,7 +36,7 @@
     <tbody>
         @foreach (var item in Model.BillDetails)
         {
-            var urlImage = $"{Configuration["Configs:Domain"]}/uploaded/images/products/{item.Product.Image}";
+            var urlImage = $"{Context.Request.Host.ToString()}/uploaded/images/products/{item.Product.Image}";
 
             <tr>
                 <td>

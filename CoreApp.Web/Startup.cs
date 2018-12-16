@@ -29,14 +29,12 @@ namespace CoreApp.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _env = env;
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment _env { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -76,15 +74,6 @@ namespace CoreApp.Web
             services.AddDataProtection()
                 .PersistKeysToFileSystem(new DirectoryInfo(@".\wwwroot\shared"))
                 .SetApplicationName("CoreApp.Web");
-
-            services.AddCors(options => options.AddPolicy("CorsPolicy",
-                builder =>
-                {
-                    builder.AllowAnyMethod()
-                        .AllowAnyHeader()
-                        .WithOrigins("https://localhost:44328")
-                        .AllowCredentials();
-                }));
 
             services.AddSignalR().AddJsonProtocol(options => {
                 options.PayloadSerializerSettings.ContractResolver = new DefaultContractResolver();
@@ -188,7 +177,6 @@ namespace CoreApp.Web
             var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(options.Value);
 
-            app.UseCors("CorsPolicy");
             app.UseSignalR(routes =>
             {
                 routes.MapHub<CoreHub>("/coreHub");

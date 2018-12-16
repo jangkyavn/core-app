@@ -8,6 +8,7 @@ using CoreApp.Data.IRepositories;
 using CoreApp.Infrastructure.Interfaces;
 using CoreApp.Utilities.Constants;
 using CoreApp.Utilities.Dtos;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,18 +24,21 @@ namespace CoreApp.Application.Implementation
         private readonly IAnnouncementUserRepository _announcementUserRepository;
         private readonly UserManager<AppUser> _userManager;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IHostingEnvironment _hostingEnviroment;
         private readonly IMapper _mapper;
 
         public AnnouncementService(IAnnouncementRepository announcementRepository,
             IAnnouncementUserRepository announcementUserRepository,
             UserManager<AppUser> userManager,
             IUnitOfWork unitOfWork,
+            IHostingEnvironment hostingEnvironment,
             IMapper mapper)
         {
             _announcementRepository = announcementRepository;
             _announcementUserRepository = announcementUserRepository;
             _userManager = userManager;
             _unitOfWork = unitOfWork;
+            _hostingEnviroment = hostingEnvironment;
             _mapper = mapper;
         }
 
@@ -105,7 +109,7 @@ namespace CoreApp.Application.Implementation
                             Content = a.Content,
                             FullName = u.FullName,
                             Avatar = u.Avatar,
-                            DateCreated = a.DateCreated,
+                            DateCreated = _hostingEnviroment.IsDevelopment() ? a.DateCreated : a.DateCreated.AddHours(7),
                             HasRead = au.HasRead.Value,
                             Status = a.Status
                         };
@@ -140,6 +144,11 @@ namespace CoreApp.Application.Implementation
         {
             var model = await _announcementRepository.FindByIdAsync(id);
             return _mapper.Map<Announcement, AnnouncementViewModel>(model);
+        }
+
+        public async Task<int> GetUnreadTotalAsync(Guid userId)
+        {
+            return await _announcementUserRepository.FindAll(x => x.ReaderId == userId && x.HasRead == false).CountAsync();
         }
 
         public void MaskAsRead(Guid userId, string id)

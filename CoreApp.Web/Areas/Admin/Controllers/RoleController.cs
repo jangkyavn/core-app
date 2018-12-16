@@ -111,6 +111,19 @@ namespace CoreApp.Web.Areas.Admin.Controllers
                 if (result.Succeeded == false)
                     return StatusCode(401);
 
+                var announcementViewModel = new AnnouncementViewModel()
+                {
+                    Content = $"Thêm mới vai trò có tên là: {roleVm.Name}",
+                    DateCreated = DateTime.Now,
+                    Status = Status.Active,
+                    Title = "Thêm mới",
+                    UserId = User.GetUserId(),
+                    FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                    Id = Guid.NewGuid().ToString()
+                };
+                await _announcementService.AddAsync(announcementViewModel);
+                await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
                 await _roleService.AddAsync(roleVm);
             }
             else
@@ -140,18 +153,37 @@ namespace CoreApp.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             var result = await _authorizationService.AuthorizeAsync(User, "ROLE", Operations.Delete);
             if (result.Succeeded == false)
                 return StatusCode(401);
 
-            if (!ModelState.IsValid)
+            if (string.IsNullOrEmpty(id.ToString()))
             {
                 return new BadRequestObjectResult(ModelState);
             }
 
-            await _roleService.DeleteAsync(id);
+            var viewModel = await _roleService.GetById(id.Value);
+            if (viewModel == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Xóa vai trò có tên là: {viewModel.Name}",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Xóa",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
+
+            await _roleService.DeleteAsync(id.Value);
             return new OkObjectResult(id);
         }
 
@@ -161,6 +193,25 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             var result = await _authorizationService.AuthorizeAsync(User, "ROLE", Operations.Update);
             if (result.Succeeded == false)
                 return StatusCode(401);
+
+            var viewModel = await _roleService.GetById(roleId);
+            if (viewModel == null)
+            {
+                return new NotFoundResult();
+            }
+
+            var announcementViewModel = new AnnouncementViewModel()
+            {
+                Content = $"Cập nhật quyền cho vai trò: {viewModel.Name}",
+                DateCreated = DateTime.Now,
+                Status = Status.Active,
+                Title = "Cập nhật",
+                UserId = User.GetUserId(),
+                FullName = User.GetSpecificClaim(CommonConstants.UserClaims.FullName),
+                Id = Guid.NewGuid().ToString()
+            };
+            await _announcementService.AddAsync(announcementViewModel);
+            await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
 
             _roleService.SavePermission(listPermmission, roleId);
             return new OkObjectResult(true);
