@@ -1,10 +1,14 @@
 ﻿@inject IReviewService ReviewService
+@inject IProductService ProductService
 
 @model CatalogViewModel
 @{
     ViewData["Title"] = Model.Data.CurrentPage == 1 ? Model.Category.Name : $"{Model.Category.Name} - Trang {Model.Data.CurrentPage}";
     ViewData["MetaKeyword"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoKeywords : "{Model.Category.SeoKeywords} - Trang ${Model.Data.CurrentPage}";
     ViewData["MetaDescription"] = Model.Data.CurrentPage == 1 ? Model.Category.SeoDescription : "{Model.Category.SeoDescription} - Trang ${Model.Data.CurrentPage}";
+
+    var minPrice = ViewData["MinPrice"];
+    var maxPrice = ViewData["MaxPrice"];
 }
 
 <!-- Breadcrumbs -->
@@ -194,8 +198,16 @@
                     }
                 </div>
             </div>
-            <partial name="~/Views/Shared/_SideBarPartial.cshtml" />
+            <vc:sidebar-filter category-id="@Model.Category.Id" from-price="@Model.FromPrice" to-price="@Model.ToPrice" />
         </div>
     </div>
 </div>
 <!-- Main Container End -->
+
+@section Scripts {
+    <script src="~/client-side/app/shared/sidebar-filter.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        var sidebarFilter = new SidebarFilter();
+        sidebarFilter.initialize();
+    </script>
+}

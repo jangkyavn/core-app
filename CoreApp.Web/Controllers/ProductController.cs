@@ -38,7 +38,7 @@ namespace CoreApp.Web.Controllers
             _configuration = configuration;
         }
 
-        public IActionResult Catalog(int id, int? pageSize, string sortBy, int page = 1)
+        public IActionResult Catalog(int id, int? pageSize, decimal? fromPrice, decimal? toPrice, string sortBy, int page = 1)
         {
             var catalog = new CatalogViewModel();
             ViewData["BodyClass"] = "shop_grid_page";
@@ -47,14 +47,16 @@ namespace CoreApp.Web.Controllers
 
             catalog.PageSize = pageSize;
             catalog.SortType = sortBy;
-            catalog.Data = _productService.GetAllPaging(string.Empty, id, sortBy, page, pageSize.Value);
+            catalog.Data = _productService.GetAllPaging(string.Empty, id, fromPrice, toPrice, sortBy, page, pageSize.Value);
             catalog.Category = _productCategoryService.GetById(id);
             catalog.Breadcrumbs = _productCategoryService.GetBreadcrumbs(id);
+            catalog.FromPrice = fromPrice;
+            catalog.ToPrice = toPrice;
 
             return View(catalog);
         }
 
-        public IActionResult Search(string keyword, int? pageSize, string sortBy, int page = 1)
+        public IActionResult Search(string keyword, int? pageSize, decimal? minPrice, decimal? maxPrice, string sortBy, int page = 1)
         {
             var catalog = new SearchResultViewModel();
             ViewData["BodyClass"] = "shop_grid_page";
@@ -63,7 +65,7 @@ namespace CoreApp.Web.Controllers
 
             catalog.PageSize = pageSize;
             catalog.SortType = sortBy;
-            catalog.Data = _productService.GetAllPaging(keyword, null, sortBy, page, pageSize.Value);
+            catalog.Data = _productService.GetAllPaging(keyword, null, minPrice, maxPrice, sortBy, page, pageSize.Value);
             catalog.Keyword = keyword;
 
             return View(catalog);

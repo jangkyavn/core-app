@@ -3,6 +3,7 @@ using AutoMapper.QueryableExtensions;
 using CoreApp.Application.Interfaces;
 using CoreApp.Application.ViewModels;
 using CoreApp.Data.Entities;
+using CoreApp.Data.Enums;
 using CoreApp.Data.IRepositories;
 using CoreApp.Infrastructure.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -17,15 +18,18 @@ namespace CoreApp.Application.Implementation
     public class ProductCategoryService : IProductCategoryService
     {
         private readonly IProductCategoryRepository _productCategoryRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
         public ProductCategoryService(
             IProductCategoryRepository productCategoryRepository,
+            IProductRepository productRepository,
             IUnitOfWork unitOfWork,
             IMapper mapper)
         {
             _productCategoryRepository = productCategoryRepository;
+            _productRepository = productRepository;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -75,7 +79,7 @@ namespace CoreApp.Application.Implementation
 
             return items;
         }
-        
+
         public ProductCategoryViewModel GetById(int id)
         {
             var model = _productCategoryRepository.FindById(id);
@@ -231,6 +235,32 @@ namespace CoreApp.Application.Implementation
                 //add this category
                 parents.Add(cat);
             }
+        }
+
+        public async Task<List<ProductCategoryFilterViewModel>> GetChildrenForFilterAsync()
+        {
+            var queryGroup = from pc in _productCategoryRepository.FindAll()
+                             join p in _productRepository.FindAll() on pc.Id equals p.CategoryId
+                             group pc by pc.Id into g
+                             select new
+                             {
+                                 ProductCategoryId = g.Key,
+                                 TotalCount = g.Select(x => x.Id).Count()
+                             };
+
+            var query = from pc in _productCategoryRepository.FindAll()
+                        join qg in queryGroup on pc.Id equals qg.ProductCategoryId
+                        where pc.Status == Status.Active
+                        orderby pc.Name
+                        select new ProductCategoryFilterViewModel
+                        {
+                            Id = pc.Id,
+                            Name = pc.Name,
+                            SeoAlias = pc.SeoAlias,
+                            TotalCount = qg.TotalCount
+                        };
+
+            return await query.ToListAsync();
         }
         #endregion
     }

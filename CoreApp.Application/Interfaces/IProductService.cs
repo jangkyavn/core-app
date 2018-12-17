@@ -17,7 +17,7 @@ namespace CoreApp.Application.Interfaces
 
         Task<List<ProductViewModel>> GetAllAsync();
 
-        PagedResult<ProductViewModel> GetAllPaging(string keyword, int? categoryId, string sortType, int page, int pageSize);
+        PagedResult<ProductViewModel> GetAllPaging(string keyword, int? categoryId, decimal? fromPrice, decimal? toPrice, string sortType, int page, int pageSize);
 
         ProductViewModel GetById(int id);
 

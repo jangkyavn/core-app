@@ -26,6 +26,8 @@ namespace CoreApp.Application.Interfaces
 
         string GetBreadcrumbs(int id);
 
+        Task<List<ProductCategoryFilterViewModel>> GetChildrenForFilterAsync();
+
         Task UpdateTreeNodePosition(string jsonModel);
 
         void Save();

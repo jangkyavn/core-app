@@ -17,6 +17,10 @@ namespace CoreApp.Web.Models.ProductViewModels
 
         public int? PageSize { set; get; }
 
+        public decimal? FromPrice { get; set; }
+
+        public decimal? ToPrice { get; set; }
+
         public List<SelectListItem> SortTypes { get; } = new List<SelectListItem>
         {
             new SelectListItem(){Value = "latest",Text = "Mới nhất"},

@@ -1,0 +1,119 @@
+﻿@model SidebarFilterViewModel
+
+@inject IReviewService ReviewService
+
+<style type="text/css">
+    .filter-price {
+        background: #e83f33;
+        color: #fff;
+        font-size: 12px;
+        padding: 6px 16px;
+        border: none;
+        display: inline-block;
+        border: 1px solid #e83f33;
+        font-weight: 600;
+        border-radius: 3px;
+        text-transform: uppercase;
+    }
+</style>
+
+<aside class="sidebar col-sm-3 col-xs-12 col-sm-pull-9">
+    <div class="block shop-by-side">
+        <div class="sidebar-bar-title">
+            <h3>Lọc sản phẩm</h3>
+        </div>
+        <div class="block-content">
+            <div class="layered-Category">
+                <h2 class="saider-bar-title">Danh mục</h2>
+                <div class="layered-content">
+                    <form id="categoriesForm" method="get">
+                        <ul class="check-box-list">
+                            @foreach (var item in Model.ProductCategories)
+                            {
+                                <li>
+                                    <input type="checkbox" id="chkCategory@(item.Id)" value="@item.Id" onclick="this.form.action='/@item.SeoAlias-c.@(item.Id).html';document.getElementById('categoriesForm').submit()" @(item.Id == Model.Category.Id ? "checked" : "")>
+                                    <label for="chkCategory@(item.Id)">
+                                        <span class="button"></span> @item.Name<span class="count">(@item.TotalCount)</span>
+                                    </label>
+                                </li>
+                            }
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="block product-price-range ">
+        <div class="sidebar-bar-title">
+            <h3>Giá tiền</h3>
+        </div>
+        <div class="block-content">
+            <input type="hidden" id="hidMinPrice" value="@Model.MinPrice.ToString("0")"  />
+            <input type="hidden" id="hidMaxPrice" value="@Model.MaxPrice.ToString("0")"  />
+            <form action="/@Model.Category.SeoAlias-c.@(Model.Category.Id).html" method="get">
+                <div class="slider-range">
+                    <input type="hidden" id="hidFromPrice" value="@Model.FromPrice.Value.ToString("0")" name="fromPrice" />
+                    <input type="hidden" id="hidToPrice" value="@Model.ToPrice.Value.ToString("0")" name="toPrice" />
+                    <div id="slider-range"></div>
+                    <div class="amount-range-price"></div>
+                    <button type="submit" class="filter-price">Lọc</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="block special-product">
+        <div class="sidebar-bar-title">
+            <h3>Sản phẩm đặc biệt</h3>
+        </div>
+        <div class="block-content">
+            <ul>
+                @foreach (var item in Model.Products)
+                {
+                    var urlImage = $"/uploaded/images/products/{item.Image}";
+                    var url = $"/{item.SeoAlias}-p.{item.Id}.html";
+
+                    <li class="item">
+                        <div class="products-block-left">
+                            <a href="@url" title="@item.Name" class="product-image">
+                                <img src="@urlImage" alt="@item.Name">
+                            </a>
+                        </div>
+                        <div class="products-block-right">
+                            <p class="product-name">
+                                <a href="@url">@item.Name</a>
+                            </p>
+                            <span class="price">@(item.PromotionPrice == null ? item.Price.ToString("N0") : item.PromotionPrice.Value.ToString("N0"))</span>
+                            <div class="rating">
+                                @for (int i = 1; i <= 5; i++)
+                                {
+                                    if (i <= await ReviewService.GetRatingAverageAsync(item.Id))
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                    else
+                                    {
+                                        <i class="fa fa-star-o"></i>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+            <a class="link-all" href="shop_grid.html">Tất cả sản phẩm</a>
+        </div>
+    </div>
+    <div class="block popular-tags-area ">
+        <div class="sidebar-bar-title">
+            <h3>Thẻ phổ biến</h3>
+        </div>
+        <div class="tag">
+            <ul>
+                @foreach (var item in Model.Tags)
+                {
+                    <li><a href="/@(item.Type == CommonConstants.ProductTag ? "pt" : "bt").@(item.Id).html">@item.Name</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+</aside>

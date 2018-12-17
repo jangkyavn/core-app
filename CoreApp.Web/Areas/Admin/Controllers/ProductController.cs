@@ -73,7 +73,7 @@ namespace CoreApp.Web.Areas.Admin.Controllers
             if (result.Succeeded == false)
                 return StatusCode(401);
 
-            var model = _productService.GetAllPaging(keyword, categoryId, null, page, pageSize);
+            var model = _productService.GetAllPaging(keyword, categoryId, null, null, null, page, pageSize);
             return new OkObjectResult(model);
         }
 

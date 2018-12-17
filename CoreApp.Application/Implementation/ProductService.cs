@@ -181,7 +181,7 @@ namespace CoreApp.Application.Implementation
                 .ToListAsync();
         }
 
-        public PagedResult<ProductViewModel> GetAllPaging(string keyword, int? categoryId, string sortType, int page, int pageSize)
+        public PagedResult<ProductViewModel> GetAllPaging(string keyword, int? categoryId, decimal? fromPrice, decimal? toPrice, string sortType, int page, int pageSize)
         {
             var query = _productRepository.FindAll(x => x.Status == Status.Active, x => x.ProductCategory);
 
@@ -196,6 +196,11 @@ namespace CoreApp.Application.Implementation
                 LoadProductByCategory(categoryId.Value, products);
 
                 query = products.AsQueryable();
+            }
+
+            if (fromPrice != null && toPrice != null)
+            {
+                query = query.Where(x => x.Price >= fromPrice && x.Price <= toPrice);
             }
 
             int totalRow = query.Count();
