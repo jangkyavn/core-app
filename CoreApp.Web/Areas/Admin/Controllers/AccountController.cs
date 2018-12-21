@@ -1,16 +1,10 @@
-﻿using CoreApp.Application.Interfaces;
-using CoreApp.Application.ViewModels;
-using CoreApp.Data.Entities;
-using CoreApp.Data.Enums;
+﻿using CoreApp.Data.Entities;
 using CoreApp.Utilities.Dtos;
 using CoreApp.Web.Areas.Admin.Models;
-using CoreApp.Web.SignalR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Logging;
-using System;
 using System.Threading.Tasks;
 
 namespace CoreApp.Web.Areas.Admin.Controllers
@@ -19,21 +13,15 @@ namespace CoreApp.Web.Areas.Admin.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
-        private readonly IAnnouncementService _announcementService;
-        private readonly IHubContext<CoreHub, ICoreHub> _hubContext;
         private readonly ILogger _logger;
 
         public AccountController(
             UserManager<AppUser> userManager,
             SignInManager<AppUser> signInManager,
-            IAnnouncementService announcementService,
-            IHubContext<CoreHub, ICoreHub> hubContext,
             ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _announcementService = announcementService;
-            _hubContext = hubContext;
             _logger = logger;
         }
 
@@ -65,21 +53,6 @@ namespace CoreApp.Web.Areas.Admin.Controllers
 
                 if (result.Succeeded)
                 {
-                    var user = await _userManager.FindByNameAsync(model.UserName);
-
-                    var announcementViewModel = new AnnouncementViewModel()
-                    {
-                        Content = $"Người dùng {user.FullName} đã đăng nhập",
-                        DateCreated = DateTime.Now,
-                        Status = Status.Active,
-                        Title = "Đăng nhập",
-                        UserId = user.Id,
-                        FullName = user.FullName,
-                        Id = Guid.NewGuid().ToString()
-                    };
-                    await _announcementService.AddAsync(announcementViewModel);
-                    await _hubContext.Clients.All.ReceiveMessage(announcementViewModel);
-
                     _logger.LogInformation("User logged in.");
                     return new OkObjectResult(new GenericResult(true));
                 }
