@@ -74,6 +74,24 @@ namespace CoreApp.Web.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> UpdateFull(AppUserViewModel appUserViewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var viewModel = await _userService.GetByIdAsync(User.GetUserId());
+                viewModel.FullName = appUserViewModel.FullName;
+                viewModel.PhoneNumber = appUserViewModel.PhoneNumber;
+                viewModel.Address = appUserViewModel.Address;
+                viewModel.Avatar = appUserViewModel.Avatar;
+
+                await _userService.UpdateAsync(viewModel);
+                return new OkObjectResult(true);
+            }
+
+            return new OkObjectResult(false);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> Update(AppUserViewModel appUserViewModel)
         {
             if (ModelState.IsValid)

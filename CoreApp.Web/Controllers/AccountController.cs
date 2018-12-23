@@ -1,5 +1,4 @@
-﻿using CoreApp.Application.ViewModels;
-using CoreApp.Data.Entities;
+﻿using CoreApp.Data.Entities;
 using CoreApp.Data.Enums;
 using CoreApp.Web.Extensions;
 using CoreApp.Web.Models.AccountViewModels;
@@ -145,7 +144,7 @@ namespace CoreApp.Web.Controllers
             {
                 return RedirectToAction(nameof(Login));
             }
-           
+
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["LoginProvider"] = info.LoginProvider;
 
@@ -159,7 +158,7 @@ namespace CoreApp.Web.Controllers
             {
                 avatar = info.Principal.Claims.Where(x => x.Type == "profile-image-url").FirstOrDefault().Value;
             }
-            
+
             var email = info.Principal.FindFirstValue(ClaimTypes.Email);
             var giveName = info.Principal.FindFirstValue(ClaimTypes.GivenName);
             var surName = info.Principal.FindFirstValue(ClaimTypes.Surname);
@@ -196,7 +195,6 @@ namespace CoreApp.Web.Controllers
                 else
                 {
                     user.FullName = $"{model.LastName} {model.FirstName}";
-                    user.Avatar = model.Avatar;
 
                     result = await _userManager.UpdateAsync(user);
                 }
@@ -218,6 +216,11 @@ namespace CoreApp.Web.Controllers
         [HttpGet]
         public IActionResult Manager()
         {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return Redirect("/dang.nhap.html");
+            }
+
             return View();
         }
 

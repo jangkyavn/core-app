@@ -2,6 +2,7 @@
 
 @inject IProductService ProductService
 @inject IReviewService ReviewService
+@inject IViewLocalizer Localizer
 
 @{
     ViewData["Title"] = Model.Title;
@@ -66,12 +67,12 @@
             <div class="col-md-3 top-banner hidden-sm">
                 <div class="jtv-banner3">
                     <div class="jtv-banner3-inner">
-                        <a href="#"><img src="~/client-side/images/sub1.jpg" alt="HTML template"></a>
+                        <a href="#"><img src="~/client-side/images/File-1499481690.jpg" alt="HTML template"></a>
                         <div class="hover_content">
                             <div class="hover_data">
-                                <div class="title"> Giảm giá lớn</div>
-                                <div class="desc-text">Giảm tới 55%</div>
-                                <p><a href="#" class="shop-now">Mua ngay!</a></p>
+                                <div class="title">@Localizer["BANNER_BIG_SALE"]</div>
+                                <div class="desc-text">@Localizer["BANNER_UP_TO"]</div>
+                                <p><a href="#" class="shop-now">@Localizer["BUY_NOW"]!</a></p>
                             </div>
                         </div>
                     </div>
@@ -82,9 +83,7 @@
                 <div class="jtv-best-sale-list">
                     <div class="wpb_wrapper">
                         <div class="best-title text-left">
-                            <h2>
-                                Ưu đãi đặc biệt
-                            </h2>
+                            <h2>@Localizer["SPECIAL_OFFER"]</h2>
                         </div>
                     </div>
                     <div class="slider-items-products">
@@ -174,7 +173,7 @@
                                                         </div>
                                                         <div class="pro-action">
                                                             <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
-                                                                <span> Mua ngay</span>
+                                                                <span> @Localizer["BUY_NOW"]</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -196,7 +195,7 @@
 <div class="container">
     <div class="home-tab">
         <div class="tab-title text-left">
-            <h2>Mới nhất</h2>
+            <h2>@Localizer["LATEST_PRODUCT"]</h2>
             <ul class="nav home-nav-tabs home-product-tabs">
                 @for (var i = 0; i < Model.HomeCategories.Count; i++)
                 {
@@ -318,7 +317,7 @@
                                                             </div>
                                                             <div class="pro-action">
                                                                 <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
-                                                                    <span> Mua ngay</span>
+                                                                    <span> @Localizer["BUY_NOW"]</span>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -341,7 +340,7 @@
 <div class="container">
     <div class="home-tab">
         <div class="tab-title text-left">
-            <h2>Bán chạy nhất</h2>
+            <h2>@Localizer["BESTSELLER_PRODUCT"]</h2>
             <ul class="nav home-nav-tabs home-product-tabs">
                 @for (var i = 0; i < Model.HomeCategories.Count; i++)
                 {
@@ -463,7 +462,7 @@
                                                             </div>
                                                             <div class="pro-action">
                                                                 <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
-                                                                    <span> Mua ngay</span>
+                                                                    <span> @Localizer["BUY_NOW"]</span>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -486,7 +485,7 @@
 <div class="container">
     <div class="home-tab">
         <div class="tab-title text-left">
-            <h2>Hot Nhất</h2>
+            <h2>@Localizer["HOTEST_PRODUCT"]</h2>
             <ul class="nav home-nav-tabs home-product-tabs">
                 @for (var i = 0; i < Model.HomeCategories.Count; i++)
                 {
@@ -608,7 +607,7 @@
                                                             </div>
                                                             <div class="pro-action">
                                                                 <button type="button" class="add-to-cart" onclick="window.location.href='@url'">
-                                                                    <span> Mua ngay</span>
+                                                                    <span> @Localizer["BUY_NOW"]</span>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -631,7 +630,7 @@
 <section class="blog-post-wrapper">
     <div class="container">
         <div class="best-title text-left">
-            <h2>Tin tức mới nhất</h2>
+            <h2>@Localizer["LATEST_NEWS"]</h2>
         </div>
         <div class="slider-items-products">
             <div id="latest-news-slider" class="product-flexslider hidden-buttons">
@@ -655,7 +654,7 @@
                                         </div>
                                     </div>
                                     <div class="blog_description">@item.Description</div>
-                                    <a class="read-more" href="@url"> Đọc thêm</a>
+                                    <a class="read-more" href="@url"> @Localizer["READ_MORE"]</a>
                                 </div>
                             </div>
                         </div>
@@ -751,8 +750,6 @@
 <partial name="_QuickViewModalPartial" />
 
 @section Scripts {
-    
-
     <environment names="Development">
         <script src="~/client-side/app/controllers/home/index.js" asp-append-version="true"></script>
     </environment>

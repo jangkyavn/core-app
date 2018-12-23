@@ -1,6 +1,10 @@
-﻿
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject UserManager<AppUser> UserManager
+
 @{
     ViewData["Title"] = "Quản lý tài khoản";
+    var user = await UserManager.FindByIdAsync(User.GetUserId().ToString());
 }
 
 @section Styles {
@@ -19,7 +23,7 @@
             border: 1px solid #ccc;
             background-color: #E83F33;
             width: 30%;
-            height: 300px;
+            height: auto;
         }
 
             /* Style the buttons inside the tab */
@@ -52,11 +56,11 @@
         /* Style the tab content */
         .tabcontent {
             float: left;
-            padding: 0px 12px;
+            padding: 1rem 4rem;
             border: 1px solid #ccc;
             width: 70%;
             border-left: none;
-            height: 300px;
+            height: auto;
         }
     </style>
 }
@@ -75,7 +79,6 @@
 </div>
 <!-- Breadcrumbs End -->
 <!-- Main Container -->
-
 <section class="blog_post">
     <div class="container">
         <!-- Center colunm-->
@@ -86,26 +89,66 @@
             <div style="margin-top: 3rem;">
                 <div class="tab">
                     <button class="tablinks" onclick="openCity(event, 'UpdateUser')" id="defaultOpen">Cập nhật thông tin tài khoản</button>
-                    <button class="tablinks" onclick="openCity(event, 'ChangeAvatar')">Thay đổi ảnh đại diện</button>
                     <button class="tablinks" onclick="openCity(event, 'DisplayWishlist')">Hiển thị danh sách yêu thích</button>
                     <button class="tablinks" onclick="openCity(event, 'DisplayCompares')">Hiển thị so sánh sản phẩm</button>
                 </div>
-
+                @{
+                    var firstName = user.FullName.Substring(user.FullName.IndexOf(' ') + 1, (user.FullName.Length - 1) - user.FullName.IndexOf(' '));
+                }
                 <div id="UpdateUser" class="tabcontent">
-                    <h3>London</h3>
-                    <p>London is the capital city of England.</p>
+                    <form id="userForm">
+                        <div class="col-sm-4 text-center">
+                            <a href="javascript:;" onclick="document.getElementById('fUploadFile').click()">
+                                <img src="@(user.Avatar.IndexOf("http") > -1 ? user.Avatar : $"/uploaded/images/avatars/{user.Avatar}")" width="180" height="200" style="margin-bottom: 5px;" id="imgAvatar" />
+                            </a>
+                            <input type="file" id="fUploadFile" style="display:none;" />
+                            <input type="hidden" id="hidAvatar" value="@user.Avatar" />
+                        </div>
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                <label for="txtEmail" class="required">Email:</label>
+                                <input type="text" class="input form-control" name="email" id="txtEmail" value="@user.Email" readonly>
+                            </div>
+                            <div class="form-group col-sm-6" style="padding-left: 0;">
+                                <label for="txtLastName" class="required">Họ:</label>
+                                <input type="text" class="input form-control" name="lastName" id="txtLastName" value="@user.FullName.Split(' ')[0]">
+                            </div>
+                            <div class="form-group col-sm-6" style="padding-right: 0;">
+                                <label for="txtFirstName" class="required">Tên:</label>
+                                <input type="text" name="firstName" class="input form-control" id="txtFirstName" value="@firstName">
+                            </div>
+                            <div class="form-group">
+                                <label for="txtPhoneNumber" class="required">Số điện thoại:</label>
+                                <input type="text" class="input form-control" name="phoneNumber" id="txtPhoneNumber" value="@(user.PhoneNumber == null ? "" : user.PhoneNumber)">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label for="txtAddress" class="required">Địa chỉ:</label>
+                            <textarea class="input form-control" name="address" id="txtAddress">@(user.Address == null ? "" : user.Address)</textarea>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="txtLastName" class="required">Tỉnh/Thành phố:</label>
+                            <select class="form-control" id="ddlCity" name="city"></select>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="txtFirstName" class="required">Quận/Huyện</label>
+                            <select class="form-control" id="ddlDistrict" name="district" disabled></select>
+                        </div>
+                        <div class="form-group col-sm-4">
+                            <label for="txtPhoneNumber" class="required">Phường/Xã:</label>
+                            <select class="form-control" id="ddlWard" name="ward" disabled></select>
+                        </div>
+                        <div class="form-group col-sm-2">
+                            <button type="button" class="btn btn-success" id="btnSaveUserForm">
+                                <i class="fa fa-save"></i>&nbsp;Lưu
+                            </button>
+                        </div>
+                    </form>
                 </div>
-
-                <div id="ChangeAvatar" class="tabcontent">
-                    <h3>Paris</h3>
-                    <p>Paris is the capital of France.</p>
-                </div>
-
                 <div id="DisplayWishlist" class="tabcontent">
                     <h3>Tokyo</h3>
                     <p>Tokyo is the capital of Japan.</p>
                 </div>
-
                 <div id="DisplayCompares" class="tabcontent">
                     <h3>Tokyo</h3>
                     <p>Tokyo is the capital of Japan.</p>
@@ -120,23 +163,29 @@
 <partial name="_ServicePartial" />
 
 @section Scripts {
-    <script>
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+    <script type="text/javascript">
         function openCity(evt, cityName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
-}
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(cityName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
 
-// Get the element with id="defaultOpen" and click on it
-document.getElementById("defaultOpen").click();
+        // Get the element with id="defaultOpen" and click on it
+        document.getElementById("defaultOpen").click();
+    </script>
+    <script src="~/client-side/app/controllers/account/manager.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        var manage = new ManageAccount();
+        manage.initialize();
     </script>
 }
 

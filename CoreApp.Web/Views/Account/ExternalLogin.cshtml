@@ -32,16 +32,29 @@
             <div class="account-login">
                 <div class="col-md-3 col-sm-2"></div>
                 <div class="col-md-6 col-sm-8">
-                    <div class="alert alert-success" style="font-size: 14px; text-align: center;">
-                        Bạn đã đăng nhập thành công bằng tài khoản <strong>@ViewData["LoginProvider"]</strong>. <br />
-                        Bạn sẽ được chuyển hướng đến trang chủ trong vòng <strong id="lblSecond">3</strong>.
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
 <!-- Main Container End -->
+
+<div id="notifyModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Thông báo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-success" style="font-size: 14px; text-align: center;">
+                    Bạn đã đăng nhập thành công bằng tài khoản <strong>@ViewData["LoginProvider"]</strong>. <br />
+                    Bạn sẽ được chuyển hướng đến trang chủ trong vòng <strong id="lblSecond">3</strong>.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     @await Html.PartialAsync("_ValidationScriptsPartial")
@@ -50,13 +63,22 @@
             document.getElementById('loginForm').submit();
         }
 
-        var idx = 3;
-        setInterval(function () {
-            $('#lblSecond').text(idx--);
+        $(document).ready(function () {
+            $('#notifyModal').modal({
+                backdrop: 'static',
+                keyboard: false,
+                show: true
+            });
 
-            if (idx === 0) {
-                submitForm();
-            }
-        }, 1000);
+            var idx = 3;
+            var interval = setInterval(function () {
+                $('#lblSecond').text(idx--);
+
+                if (idx === 0) {
+                    submitForm();
+                    clearInterval(interval);
+                }
+            }, 1000);
+        });
     </script>
 }
