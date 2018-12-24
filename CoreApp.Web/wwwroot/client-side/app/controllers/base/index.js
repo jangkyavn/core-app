@@ -24,6 +24,18 @@ var BaseController = {
             $('#hidCulture').val(culture);
             $('#selectLanguage').submit();
         });
+
+        $('body').on('click', '.btn-compare', function (e) {
+            e.preventDefault();
+
+            var productId = $(this).data('id');
+
+            core.callAjax('/Compare/AddToCompare', 'POST', { productId }, 'json', function (res) {
+                if (res) {
+                    core.notify(resources.add_success, 'success');
+                }
+            });
+        });
     },
     initialControls: function () {
         $("#txtKeywordSearch").autocomplete({
@@ -161,14 +173,14 @@ var BaseController = {
             $.each(res.Colors, function (i, item) {
                 renderColors += `<option value='${item.Id}'>${item.Name}</option>`;
             });
-            renderColors += '</select>'
+            renderColors += '</select>';
             $('#lblQuickViewColors').html(renderColors);
 
             var renderSizes = '<select class="form-control" id="ddlQuickViewSizes">';
             $.each(res.Sizes, function (i, item) {
                 renderSizes += `<option value='${item.Id}'>${item.Name}</option>`;
             });
-            renderSizes += '</select>'
+            renderSizes += '</select>';
             $('#lblQuickViewSizes').html(renderSizes);
         });
     }

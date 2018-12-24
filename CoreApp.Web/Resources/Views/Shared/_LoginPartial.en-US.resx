@@ -120,16 +120,13 @@
   <data name="ACCOUNT_INFORMATION" xml:space="preserve">
     <value>Account information</value>
   </data>
+  <data name="COMPARE" xml:space="preserve">
+    <value>Compare product</value>
+  </data>
   <data name="LOGIN" xml:space="preserve">
     <value>Login</value>
   </data>
   <data name="LOGOUT" xml:space="preserve">
     <value>Logout</value>
-  </data>
-  <data name="TRACK_ORDERS" xml:space="preserve">
-    <value>Track orders</value>
-  </data>
-  <data name="WISHLIST" xml:space="preserve">
-    <value>Wishlish</value>
   </data>
 </root>

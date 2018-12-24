@@ -9,6 +9,7 @@
         public const string BlogTag = "Blog";
 
         public const string CartSession = "CartSession";
+        public const string CompareSession = "CompareSession";
 
         public class UserRoles
         {

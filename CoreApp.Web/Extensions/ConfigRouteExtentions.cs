@@ -9,6 +9,11 @@ namespace CoreApp.Web.Extensions
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
+                 name: "compare",
+                 template: "so-sanh-san-pham.html",
+                 defaults: new { controller = "Compare", action = "Index" });
+
+                routes.MapRoute(
                   name: "blog_tag",
                   template: "bt.{tagId}.html",
                   defaults: new { controller = "Blog", action = "BlogTag" });

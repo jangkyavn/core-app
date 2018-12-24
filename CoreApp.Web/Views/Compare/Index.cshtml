@@ -1,0 +1,52 @@
+﻿
+@{
+    ViewData["Title"] = "So sánh sản phẩm";
+}
+
+<div class="breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <ul>
+                    <li class="home">
+                        <a title="Trở về trang chủ" href="/trang-chu.html">Trang chủ</a><span>&raquo;</span>
+                    </li>
+                    <li><strong>So sánh sản phẩm </strong></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumbs End -->
+<!-- Main Container -->
+<section class="main-container col1-layout">
+    <div class="main container">
+        <div class="col-main">
+            <div class="compare-list">
+                <div class="page-title">
+                    <h2>So sánh sản phẩm</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-compare">
+                        <tr id="trProductImages"></tr>
+                        <tr id="trProductNames"></tr>
+                        <tr id="trReviews"></tr>
+                        <tr id="trPrices"></tr>
+                        <tr id="trDescriptions"></tr>
+                        <tr id="trStatus"></tr>
+                        <tr id="trActions"></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<partial name="_ServicePartial" />
+
+@section Scripts {
+    <script src="~/client-side/app/controllers/compare/index.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        var compareController = new CompareController();
+        compareController.initialize();
+    </script>
+}

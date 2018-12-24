@@ -23,6 +23,12 @@ namespace CoreApp.Web.Controllers
             _hostingEnvironment = hostingEnvironment;
         }
 
+        [HttpGet]
+        public IActionResult GetCompares()
+        {
+            return new OkObjectResult(true);
+        }
+
         #region Ajax Request
         [HttpGet]
         public async Task<IActionResult> GetById(Guid id)
