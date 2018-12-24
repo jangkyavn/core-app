@@ -1,7 +1,9 @@
 ﻿using CoreApp.Application.Interfaces;
+using CoreApp.Data.Entities;
 using CoreApp.Utilities.Constants;
 using CoreApp.Web.Extensions;
 using CoreApp.Web.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +15,25 @@ namespace CoreApp.Web.Controllers
     {
         private readonly IProductService _productService;
         private readonly IReviewService _reviewService;
+        private readonly SignInManager<AppUser> _signInManager;
 
         public CompareController(IProductService productService,
-            IReviewService  reviewService)
+            IReviewService reviewService,
+            SignInManager<AppUser> signInManager)
         {
             _productService = productService;
             _reviewService = reviewService;
+            _signInManager = signInManager;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return Redirect("/dang-nhap.html");
+            }
+
             return View();
         }
 
@@ -39,14 +49,20 @@ namespace CoreApp.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCompare(int productId)
         {
+            if (!_signInManager.IsSignedIn(User))
+            {
+                return new OkObjectResult(false);
+            }
+
             var product = _productService.GetById(productId);
-       
+
             var session = HttpContext.Session.Get<List<CompareProductViewModel>>(CommonConstants.CompareSession);
             if (session != null)
             {
                 if (!session.Any(x => x.Product.Id == productId))
                 {
-                    session.Add(new CompareProductViewModel() {
+                    session.Add(new CompareProductViewModel()
+                    {
                         Product = product,
                         RatingAverage = await _reviewService.GetRatingAverageAsync(productId),
                         RatingTotal = await _reviewService.GetRatingTotalAsync(productId)
@@ -68,7 +84,7 @@ namespace CoreApp.Web.Controllers
                 HttpContext.Session.Set(CommonConstants.CompareSession, compares);
             }
 
-            return new OkObjectResult(productId);
+            return new OkObjectResult(true);
         }
 
         [HttpPost]

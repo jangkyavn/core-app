@@ -157,8 +157,6 @@ var ManageAccount = function () {
                     }
                 });
 
-                console.log(cityId);
-
                 $("#ddlCity").val(cityId);
                 var districtId = 0;
                 core.callAjax('/User/LoadDistricts', 'GET', { cityId }, 'json', function (districts) {

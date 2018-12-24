@@ -111,12 +111,12 @@
                                                     <div class="pr-info-area">
                                                         <div class="pr-button">
                                                             <div class="mt-button add_to_compare">
-                                                                <a href="compare.html">
-                                                                    <i class="fa fa-signal"></i>
+                                                                <a href="#" class="btn-compare" data-id="@item.Id">
+                                                                    <i class="fa fa-link"></i>
                                                                 </a>
                                                             </div>
                                                             <div class="mt-button quick-view">
-                                                                <a href="quick_view.html">
+                                                                <a href="#" class="btn-quich-view" data-id="@item.Id">
                                                                     <i class="fa fa-search"></i>
                                                                 </a>
                                                             </div>
@@ -191,3 +191,4 @@
     </div>
 </div>
 <!-- Main Container End -->
+<partial name="_QuickViewModalPartial" />

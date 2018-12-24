@@ -9,5 +9,6 @@ var resources = {
     add_to_cart_success: 'Thêm vào giỏ hàng thành công',
     update_to_cart_success: 'Cập nhật giỏ hàng thành công',
     delete_to_item_cart_success: 'Xóa sản phẩm khỏi giỏ hàng thành công',
-    clear_to_cart_success: 'Xóa tất cả sản phẩm trong giỏ hàng thành công'
+    clear_to_cart_success: 'Xóa tất cả sản phẩm trong giỏ hàng thành công',
+    require_login: 'Bạn cần phải đăng nhập'
 };

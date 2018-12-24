@@ -89,8 +89,7 @@
             <div style="margin-top: 3rem;">
                 <div class="tab">
                     <button class="tablinks" onclick="openCity(event, 'UpdateUser')" id="defaultOpen">Cập nhật thông tin tài khoản</button>
-                    <button class="tablinks" onclick="openCity(event, 'DisplayWishlist')">Hiển thị danh sách yêu thích</button>
-                    <button class="tablinks" onclick="openCity(event, 'DisplayCompares')">Hiển thị so sánh sản phẩm</button>
+                    <button class="tablinks" onclick="openCity(event, 'TrackingOrders')">Theo dõi đơn hàng</button>
                 </div>
                 @{
                     var firstName = user.FullName.Substring(user.FullName.IndexOf(' ') + 1, (user.FullName.Length - 1) - user.FullName.IndexOf(' '));
@@ -145,13 +144,8 @@
                         </div>
                     </form>
                 </div>
-                <div id="DisplayWishlist" class="tabcontent">
-                    <h3>Tokyo</h3>
-                    <p>Tokyo is the capital of Japan.</p>
-                </div>
-                <div id="DisplayCompares" class="tabcontent">
-                    <h3>Tokyo</h3>
-                    <p>Tokyo is the capital of Japan.</p>
+                <div id="TrackingOrders" class="tabcontent">
+                    <h1>đang phát triển</h1>
                 </div>
             </div>
         </div>

@@ -75,30 +75,30 @@ var HomeController = function () {
     };
 
     var registerEvents = function () {
-        $('.btn-quich-view').on('click', function (e) {
-            e.preventDefault();
-            var id = $(this).data('id');
-            $('#btnQuickViewAddToCart').attr('data-id', id);
+        //$('.btn-quich-view').on('click', function (e) {
+        //    e.preventDefault();
+        //    var id = $(this).data('id');
+        //    $('#btnQuickViewAddToCart').attr('data-id', id);
 
-            $('#quickViewModal').modal('show');
-            BaseController.loadQuickViewData(id);
-        });
+        //    $('#quickViewModal').modal('show');
+        //    BaseController.loadQuickViewData(id);
+        //});
 
-        $('#btnQuickViewAddToCart').on('click', function (e) {
-            e.preventDefault();
-            var id = parseInt($(this).data('id'));
-            var colorId = parseInt($('#ddlQuickViewColors').val());
-            var sizeId = parseInt($('#ddlQuickViewSizes').val());
+        //$('#btnQuickViewAddToCart').on('click', function (e) {
+        //    e.preventDefault();
+        //    var id = parseInt($(this).data('id'));
+        //    var colorId = parseInt($('#ddlQuickViewColors').val());
+        //    var sizeId = parseInt($('#ddlQuickViewSizes').val());
 
-            core.callAjax('/Cart/AddToCart', 'POST', {
-                productId: id,
-                quantity: parseInt($('#txtQuickViewQuantity').val()),
-                color: colorId,
-                size: sizeId
-            }, 'json', function () {
-                core.notify(resources.add_to_cart_success, 'success');
-                BaseController.loadHeaderCart();
-            });
-        });
+        //    core.callAjax('/Cart/AddToCart', 'POST', {
+        //        productId: id,
+        //        quantity: parseInt($('#txtQuickViewQuantity').val()),
+        //        color: colorId,
+        //        size: sizeId
+        //    }, 'json', function () {
+        //        core.notify(resources.add_to_cart_success, 'success');
+        //        BaseController.loadHeaderCart();
+        //    });
+        //});
     };
 };
